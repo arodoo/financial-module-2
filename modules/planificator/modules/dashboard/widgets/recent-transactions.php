@@ -9,17 +9,39 @@
                 <p class="text-muted">Aucune transaction enregistrée pour le moment.</p>
             <?php else: ?>
                 <div class="list-group">
-                    <?php foreach ($recentTransactions as $transaction): ?>
+                    <?php foreach ($recentTransactions as $transaction): 
+                        // Determine transaction type and styling
+                        $isIncome = in_array($transaction['type'], ['income', 'fixed_income']);
+                        $isFixed = in_array($transaction['type'], ['fixed_income', 'fixed_expense']);
+                        
+                        // Date field may be transaction_date or start_date depending on type
+                        $dateField = isset($transaction['transaction_date']) ? 'transaction_date' : 'start_date';
+                        
+                        // Style classes
+                        $textColorClass = $isIncome ? 'text-success' : 'text-danger';
+                        $badgeClass = $isFixed ? 'bg-info' : 'bg-secondary';
+                        $badgeText = $isFixed ? 'Fixe' : 'Ponctuel';
+                    ?>
                         <div class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1"><?php echo htmlspecialchars($transaction['category']); ?></h6>
-                                <small><?php echo date('d M Y', strtotime($transaction['transaction_date'])); ?></small>
+                                <h6 class="mb-1">
+                                    <?php echo htmlspecialchars($transaction['category']); ?>
+                                    <span class="badge <?php echo $badgeClass; ?> ms-2" style="font-size: 0.7rem;">
+                                        <?php echo $badgeText; ?>
+                                    </span>
+                                </h6>
+                                <small><?php echo date('d M Y', strtotime($transaction[$dateField])); ?></small>
                             </div>
                             <p class="mb-1"><?php echo htmlspecialchars($transaction['description'] ?: 'Pas de description'); ?></p>
                             <div class="d-flex w-100 justify-content-between">
-                                <small class="text-muted"><?php echo $transaction['type'] === 'income' ? 'Revenu' : 'Dépense'; ?></small>
-                                <span class="<?php echo $transaction['type'] === 'income' ? 'text-success' : 'text-danger'; ?>">
-                                    <?php echo $transaction['type'] === 'income' ? '+' : '-'; ?>€<?php echo number_format($transaction['amount'], 2); ?>
+                                <small class="text-muted">
+                                    <?php echo $isIncome ? 'Revenu' : 'Dépense'; ?>
+                                    <?php if ($isFixed && isset($transaction['frequency'])): ?>
+                                        <span class="ms-1">(<?php echo htmlspecialchars($transaction['frequency']); ?>)</span>
+                                    <?php endif; ?>
+                                </small>
+                                <span class="<?php echo $textColorClass; ?>">
+                                    <?php echo $isIncome ? '+' : '-'; ?>€<?php echo number_format($transaction['amount'], 2); ?>
                                 </span>
                             </div>
                         </div>
@@ -27,7 +49,8 @@
                 </div>
             <?php endif; ?>
             <div class="text-center mt-3">
-                <a href="?action=income-expense" class="btn btn-sm btn-outline-primary">Voir Toutes les Transactions</a>
+                <a href="?action=income-expense" class="btn btn-sm btn-outline-primary">Voir Transactions Ponctuelles</a>
+                <a href="?action=fixed-payments" class="btn btn-sm btn-outline-primary ms-2">Voir Transactions Fixes</a>
             </div>
         </div>
     </div>

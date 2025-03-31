@@ -33,6 +33,7 @@ $assetsByCategory = $assetModel->getAssetsByCategory();
 // Load widget components
 include __DIR__ . '/widgets/summary-header.php';
 include __DIR__ . '/widgets/summary-cards.php';
+include __DIR__ . '/widgets/fixed-payments-summary.php'; // Added new fixed payments widget
 include __DIR__ . '/widgets/loan-summary.php';
 /* include __DIR__ . '/widgets/school-fee-summary.php'; */
 ?>
