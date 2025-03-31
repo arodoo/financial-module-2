@@ -258,6 +258,22 @@ RewriteRule ^Traitements-informations$ /?page=Traitements-informations [L]
 RewriteRule ^Traitements-gratuit$ /?page=Traitements-gratuit [L]
 
 # Financial planning module - Route through authentication entry point
+# French URL mappings for financial modules
+RewriteRule ^Revenus-Depenses/?$ /modules/planificator/planificator-entry.php?action=income-expense [L,QSA]
+RewriteRule ^Paiements-Fixes/?$ /modules/planificator/planificator-entry.php?action=fixed-payments [L,QSA]
+RewriteRule ^Gestion-Actifs/?$ /modules/planificator/planificator-entry.php?action=asset-management [L,QSA]
+RewriteRule ^Projection-Financiere/?$ /modules/planificator/planificator-entry.php?action=financial-projection [L,QSA]
+RewriteRule ^Simulateur-Pret/?$ /modules/planificator/planificator-entry.php?action=loan-simulator [L,QSA]
+RewriteRule ^Frais-Scolaires/?$ /modules/planificator/planificator-entry.php?action=school-fee [L,QSA]
+RewriteRule ^Tableau-de-Bord/?$ /modules/planificator/planificator-entry.php?action=dashboard [L,QSA]
+
+# French URL mappings for AJAX handlers
+RewriteRule ^Revenus-Depenses/ajax-handler\.php$ /modules/planificator/modules/income-expense/ajax-handler.php [L,QSA]
+RewriteRule ^Gestion-Actifs/ajax-handler\.php$ /modules/planificator/modules/asset-management/ajax-handler.php [L,QSA]
+RewriteRule ^Paiements-Fixes/ajax-handler\.php$ /modules/planificator/modules/fixed-payments/ajax-handler.php [L,QSA]
+RewriteRule ^Projection-Financiere/ajax-handler\.php$ /modules/planificator/modules/financial-projection/ajax-handler.php [L,QSA]
+
+# Original English routes
 RewriteRule ^Planificator/modules/income-expense/ajax-handler\.php$ - [L]
 RewriteRule ^Planificator/modules/asset-management/ajax-handler\.php$ - [L]
 RewriteRule ^Planificator/modules/fixed-payments/ajax-handler\.php$ - [L]

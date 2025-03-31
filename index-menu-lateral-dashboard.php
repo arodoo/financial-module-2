@@ -2,43 +2,43 @@
 	<div class="deznav-scroll">
 		<ul class="metismenu" id="menu">
 			<!-- Financial Planning - Individual menu items -->
-			<li><a class="ai-icon" href="/Planificator/dashboard" aria-expanded="false">
+			<li><a class="ai-icon" href="/Tableau-de-Bord" aria-expanded="false">
 					<i class="fas fa-tachometer-alt"></i>
 					<span class="nav-text">Dashboard</span>
 				</a>
 			</li>
 
-			<li><a class="ai-icon" href="/Planificator/income-expense" aria-expanded="false">
+			<li><a class="ai-icon" href="/Revenus-Depenses" aria-expanded="false">
 					<i class="fas fa-chart-pie"></i>
 					<span class="nav-text">Revenus & Dépenses</span>
 				</a>
 			</li>
 
-			<li><a class="ai-icon" href="/Planificator/asset-management" aria-expanded="false">
+			<li><a class="ai-icon" href="/Gestion-Actifs" aria-expanded="false">
 					<i class="fas fa-building"></i>
 					<span class="nav-text">Gestion des actifs</span>
 				</a>
 			</li>
 
-			<li><a class="ai-icon" href="/Planificator/fixed-payments" aria-expanded="false">
+			<li><a class="ai-icon" href="/Paiements-Fixes" aria-expanded="false">
 					<i class="fas fa-credit-card"></i>
 					<span class="nav-text">Paiements fixes</span>
 				</a>
 			</li>
 
-			<li><a class="ai-icon" href="/Planificator/financial-projection" aria-expanded="false">
+			<li><a class="ai-icon" href="/Projection-Financiere" aria-expanded="false">
 					<i class="fas fa-clock"></i>
-					<span class="nav-text">Financial Projection</span>
+					<span class="nav-text">Projection Financière</span>
 				</a>
 			</li>
 
-			<!-- <li><a class="ai-icon" href="/Planificator/loan-simulator" aria-expanded="false">
+			<!-- <li><a class="ai-icon" href="/Simulateur-Pret" aria-expanded="false">
 					<i class="fas fa-calculator"></i>
 					<span class="nav-text">Simulateur de prêt</span>
 				</a>
 			</li>
 
-			<li><a class="ai-icon" href="/Planificator/school-fee" aria-expanded="false">
+			<li><a class="ai-icon" href="/Frais-Scolaires" aria-expanded="false">
 					<i class="fas fa-graduation-cap"></i>
 					<span class="nav-text">Frais scolaires</span>
 				</a>
