@@ -1,0 +1,220 @@
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined array key "action_password" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 94
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 185
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 10
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 13
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/login/login_popup.php on line 33
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 15
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined array key "idaction" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 20
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined array key "type" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 21
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 16
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $Nom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $Prenom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $coloorpr in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $Code_postal in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $Ville in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $Mail in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 187
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 192
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $checkedok in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:14:44 UTC] PHP Warning:  Undefined variable $checkediiinfos in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined array key "action_password" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 94
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 185
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 10
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 13
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/login/login_popup.php on line 33
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 15
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined array key "idaction" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 20
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined array key "type" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 21
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 16
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $Nom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $Prenom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $coloorpr in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $Code_postal in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $Ville in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $Mail in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 187
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 192
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $checkedok in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:14:52 UTC] PHP Warning:  Undefined variable $checkediiinfos in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined array key "action_password" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 94
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 185
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 10
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 13
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/login/login_popup.php on line 33
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 15
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined array key "idaction" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 20
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined array key "type" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 21
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 16
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $Nom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $Prenom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $coloorpr in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $Code_postal in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $Ville in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $Mail in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 187
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 192
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $checkedok in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:15:00 UTC] PHP Warning:  Undefined variable $checkediiinfos in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:15:09 UTC] SUCCESS: Database connection established in FixedPayment model
+[31-Mar-2025 03:15:09 UTC] SUCCESS: Database connection established in FixedDepense model
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined array key "action_password" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 94
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 185
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 10
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 13
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/login/login_popup.php on line 33
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 15
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined array key "idaction" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 20
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined array key "type" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 21
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 16
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $Nom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $Prenom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $coloorpr in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $Code_postal in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $Ville in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $Mail in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 187
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 192
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $checkedok in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:15:09 UTC] PHP Warning:  Undefined variable $checkediiinfos in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:15:14 UTC] ====== FINANCIAL PROJECTION INDEX.PHP LOADED ======
+[31-Mar-2025 03:15:14 UTC] Request URI: /Planificator/financial-projection
+[31-Mar-2025 03:15:14 UTC] REQUEST params: {"action":"financial-projection"}
+[31-Mar-2025 03:15:14 UTC] POST data: []
+[31-Mar-2025 03:15:14 UTC] HTTP Headers: {"Priority":"u=0, i","Sec-Fetch-User":"?1","Sec-Fetch-Site":"same-origin","Sec-Fetch-Mode":"navigate","Sec-Fetch-Dest":"document","Upgrade-Insecure-Requests":"1","Cookie":"HttpOnly; PHPSESSID=5g0f8brqafg7l31lus2fka1o81; HttpOnly","Referer":"https:\/\/zen-famili.com\/Planificator\/fixed-payments","Connection":"keep-alive","Accept-Encoding":"gzip, deflate, br, zstd","Accept-Language":"es-MX,es;q=0.8,en-US;q=0.5,en;q=0.3","Accept":"text\/html,application\/xhtml+xml,application\/xml;q=0.9,*\/*;q=0.8","User-Agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64; rv:136.0) Gecko\/20100101 Firefox\/136.0","Host":"zen-famili.com"}
+[31-Mar-2025 03:15:14 UTC] [DEBUG] Script execution started
+[31-Mar-2025 03:15:14 UTC] [DEBUG] Is AJAX request?: NO
+[31-Mar-2025 03:15:14 UTC] [DEBUG] Action requested:: financial-projection
+[31-Mar-2025 03:15:14 UTC] [DEBUG] Full URL:: https://zen-famili.com/Planificator/financial-projection
+[31-Mar-2025 03:15:14 UTC] [DEBUG] Loading dependencies
+[31-Mar-2025 03:15:14 UTC] [DEBUG] Loading FinancialProjectionController
+[31-Mar-2025 03:15:14 UTC] [DEBUG] Initializing controller
+[31-Mar-2025 03:15:14 UTC] [DEBUG] Getting view data
+[31-Mar-2025 03:15:14 UTC] [DEBUG] Loading projection template
+[31-Mar-2025 03:15:14 UTC] [DEBUG] Script execution completed
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined array key "action_password" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 94
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 185
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 10
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 13
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/login/login_popup.php on line 33
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 15
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined array key "idaction" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 20
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined array key "type" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 21
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 16
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $Nom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $Prenom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $coloorpr in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $Code_postal in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $Ville in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $Mail in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 187
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 192
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $checkedok in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:15:14 UTC] PHP Warning:  Undefined variable $checkediiinfos in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined array key "action_password" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 94
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 185
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 10
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 13
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/login/login_popup.php on line 33
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 15
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined array key "idaction" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 20
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined array key "type" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 21
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 16
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $Nom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $Prenom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $coloorpr in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $Code_postal in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $Ville in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $Mail in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 187
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 192
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $checkedok in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:15:52 UTC] PHP Warning:  Undefined variable $checkediiinfos in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined array key "action_password" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 94
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 168
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/js/INCLUDE-JS-BAS-CMS-CODI-ONE.php on line 185
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 10
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 13
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined array key "a" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/login/login_popup.php on line 33
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 15
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined array key "idaction" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 20
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined array key "type" in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/mot-de-passe-confirmation/password_confirmation_popup.php on line 21
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $dir_fonction in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/INCLUDE-POP-UP-BAS-CMS-CODI-ONE.php on line 16
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $Nom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 163
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $Prenom in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 164
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $coloorpr in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 169
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $Code_postal in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 175
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $Ville in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 176
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $Mail in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 180
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $Telephone_portable in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $coloorm in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 181
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 187
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $coloorppasse in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 192
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $checkedok in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
+[31-Mar-2025 03:19:34 UTC] PHP Warning:  Undefined variable $checkediiinfos in /var/www/vhosts/zen-famili.com/httpdocs/pop-up/inscription/inscription_popup.php on line 201
