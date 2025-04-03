@@ -32,7 +32,7 @@ if (!empty($_SESSION['4M8e7M5b1R2e8s']) || !empty($user)) {
     }
     ?>
 
-    <!-- Fix CSS path - correct path to match file location -->
+    
     <link rel="stylesheet" href="/modules/planificator/modules/modules.css">
 
     <nav id="main-nav" class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 border rounded">
