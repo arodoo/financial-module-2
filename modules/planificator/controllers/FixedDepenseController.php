@@ -63,6 +63,15 @@ class FixedDepenseController {
     }
     
     /**
+     * Get all expenses for a user (alias for getDepenses for compatibility with shared templates)
+     * @param int $membre_id User ID
+     * @return array Expenses data
+     */
+    public function getItems($membre_id = null) {
+        return $this->getDepenses($membre_id);
+    }
+    
+    /**
      * Get a specific expense by ID
      * @param int $expense_id Expense ID
      * @return array|false Expense data or false if not found

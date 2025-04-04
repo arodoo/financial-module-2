@@ -48,6 +48,15 @@ class FixedPaymentController {
     }
     
     /**
+     * Get all payments for a user (alias for getPayments for compatibility with shared templates)
+     * @param int $membre_id User ID
+     * @return array Payments data
+     */
+    public function getItems($membre_id = null) {
+        return $this->getPayments($membre_id);
+    }
+    
+    /**
      * Get all payments for a user
      * @param int $membre_id User ID
      * @return array Payments data
