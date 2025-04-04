@@ -16,7 +16,7 @@ if (!empty($_SESSION['4M8e7M5b1R2e8s']) || !empty($user)) {
     $modules = [
     'dashboard' => 'Tableau de bord',
     'income-expense' => 'Revenus & Dépenses',     
-    'fixed-payments' => 'Paiements fixes',
+    'fixed-payments' => 'Ressources & Charges Fixes ',
     'asset-management' => 'Gestion des actifs',
     'financial-projection' => 'Financière Projection',
     'loan-simulator' => 'Simulateur de prêt',
@@ -32,12 +32,12 @@ if (!empty($_SESSION['4M8e7M5b1R2e8s']) || !empty($user)) {
     }
     ?>
 
-    
+    <!-- Fix CSS path - correct path to match file location -->
     <link rel="stylesheet" href="/modules/planificator/modules/modules.css">
 
     <nav id="main-nav" class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 border rounded">
         <div class="container">
-            <a class="navbar-brand" href="#">Système de Gestion Financière</a>
+            <a class="navbar-brand" href="#">Planification et gestion financière pour la Famile</a>
             <!-- Membre indicator -->
             <span class="navbar-text me-3 text-white">
                 <?php if ($currentMembre): ?>

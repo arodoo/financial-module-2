@@ -15,11 +15,11 @@ $fixedPayments = $fixedPaymentModel->getAllPayments($id_oo);
 $fixedExpenses = $fixedDepenseModel->getAllExpenses($id_oo);
 
 // Filter only active items
-$activePayments = array_filter($fixedPayments, function($payment) {
+$activePayments = array_filter($fixedPayments, function ($payment) {
     return $payment['status'] === 'active';
 });
 
-$activeExpenses = array_filter($fixedExpenses, function($expense) {
+$activeExpenses = array_filter($fixedExpenses, function ($expense) {
     return $expense['status'] === 'active';
 });
 
@@ -44,9 +44,10 @@ $totalMonthlyExpenses = array_sum(array_column($activeExpenses, 'monthly_amount'
 $netMonthly = $totalMonthlyIncome - $totalMonthlyExpenses;
 
 // Helper function to convert different payment frequencies to monthly equivalents
-function calculateMonthlyEquivalent($amount, $frequency) {
+function calculateMonthlyEquivalent($amount, $frequency)
+{
     $frequency = strtolower($frequency);
-    
+
     switch ($frequency) {
         case 'monthly':
         case 'mensuel':
@@ -73,53 +74,59 @@ function calculateMonthlyEquivalent($amount, $frequency) {
 }
 
 // Sort by monthly amount (descending)
-usort($activePayments, function($a, $b) {
+usort($activePayments, function ($a, $b) {
     return $b['monthly_amount'] <=> $a['monthly_amount'];
 });
 
-usort($activeExpenses, function($a, $b) {
+usort($activeExpenses, function ($a, $b) {
     return $b['monthly_amount'] <=> $a['monthly_amount'];
 });
 ?>
+
+<style>
+    .text-white {
+        color: white !important;
+    }
+</style>
 
 <div class="row mt-4">
     <div class="col-12">
         <div class="card">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Paiements & Dépenses Fixes</h5>
-                <a href="?action=fixed-payments" class="btn btn-sm btn-outline-primary">Gérer</a>
+                <a href="/Paiements-Fixes" class="btn btn-sm btn-outline-primary">Gérer</a>
             </div>
             <div class="card-body">
-                
+
                 <!-- Monthly Summary -->
                 <div class="row mb-4">
                     <div class="col-md-3">
                         <div class="card text-bg-success h-100">
                             <div class="card-body text-center">
-                                <h6>Revenus Fixes Mensuels</h6>
-                                <h3>€<?php echo number_format($totalMonthlyIncome, 2); ?></h3>
+                                <h6 class="text-white">Revenus Fixes Mensuels</h6>
+                                <h3 class="text-white">€<?php echo number_format($totalMonthlyIncome, 2); ?></h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="card text-bg-danger h-100">
                             <div class="card-body text-center">
-                                <h6>Dépenses Fixes Mensuelles</h6>
-                                <h3>€<?php echo number_format($totalMonthlyExpenses, 2); ?></h3>
+                                <h6 class="text-white">Dépenses Fixes Mensuelles</h6>
+                                <h3 class="text-white">€<?php echo number_format($totalMonthlyExpenses, 2); ?></h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="card h-100 <?php echo $netMonthly >= 0 ? 'text-bg-info' : 'text-bg-warning'; ?>">
                             <div class="card-body text-center">
-                                <h6>Solde Net Mensuel</h6>
-                                <h3>€<?php echo number_format($netMonthly, 2); ?></h3>
-                                <small>Basé uniquement sur vos revenus et dépenses fixes</small>
+                                <h6 class="text-white">Solde Net Mensuel</h6>
+                                <h3 class="text-white">€<?php echo number_format($netMonthly, 2); ?></h3>
+                                <small class="text-white">Basé uniquement sur vos revenus et dépenses fixes</small>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <!-- Fixed Income List -->
                     <div class="col-md-6">
@@ -143,13 +150,15 @@ usort($activeExpenses, function($a, $b) {
                                                 <td><?php echo htmlspecialchars($payment['name']); ?></td>
                                                 <td><?php echo htmlspecialchars($payment['frequency']); ?></td>
                                                 <td class="text-end">€<?php echo number_format($payment['amount'], 2); ?></td>
-                                                <td class="text-end">€<?php echo number_format($payment['monthly_amount'], 2); ?></td>
+                                                <td class="text-end">
+                                                    €<?php echo number_format($payment['monthly_amount'], 2); ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                         <?php if (count($activePayments) > 4): ?>
                                             <tr>
                                                 <td colspan="4" class="text-center">
-                                                    <a href="?action=fixed-payments" class="small">Voir tous (<?php echo count($activePayments); ?>)</a>
+                                                    <a href="?action=fixed-payments" class="small">Voir tous
+                                                        (<?php echo count($activePayments); ?>)</a>
                                                 </td>
                                             </tr>
                                         <?php endif; ?>
@@ -158,7 +167,7 @@ usort($activeExpenses, function($a, $b) {
                             </div>
                         <?php endif; ?>
                     </div>
-                    
+
                     <!-- Fixed Expenses List -->
                     <div class="col-md-6">
                         <h6 class="text-danger mb-3">Dépenses Fixes</h6>
@@ -181,13 +190,15 @@ usort($activeExpenses, function($a, $b) {
                                                 <td><?php echo htmlspecialchars($expense['name']); ?></td>
                                                 <td><?php echo htmlspecialchars($expense['frequency']); ?></td>
                                                 <td class="text-end">€<?php echo number_format($expense['amount'], 2); ?></td>
-                                                <td class="text-end">€<?php echo number_format($expense['monthly_amount'], 2); ?></td>
+                                                <td class="text-end">
+                                                    €<?php echo number_format($expense['monthly_amount'], 2); ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                         <?php if (count($activeExpenses) > 4): ?>
                                             <tr>
                                                 <td colspan="4" class="text-center">
-                                                    <a href="?action=fixed-payments" class="small">Voir tous (<?php echo count($activeExpenses); ?>)</a>
+                                                    <a href="?action=fixed-payments" class="small">Voir tous
+                                                        (<?php echo count($activeExpenses); ?>)</a>
                                                 </td>
                                             </tr>
                                         <?php endif; ?>

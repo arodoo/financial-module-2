@@ -1,27 +1,31 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
 
-class Dashboard {
+class Dashboard
+{
     private $conn;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->conn = getDbConnection();
     }
 
-    public function getTotalIncome($startDate = null, $endDate = null) {
+    public function getTotalIncome($startDate = null, $endDate = null)
+    {
         global $id_oo;
-        
+
         // 1. Get income from one-time transactions
         $transactionTotal = $this->getTransactionIncome($id_oo, $startDate, $endDate);
-        
+
         // 2. Get income from fixed payments
         $fixedPaymentTotal = $this->getFixedPaymentIncome($id_oo, $startDate, $endDate);
-        
+
         // Return combined total
         return $transactionTotal + $fixedPaymentTotal;
     }
-    
-    private function getTransactionIncome($membre_id, $startDate = null, $endDate = null) {
+
+    private function getTransactionIncome($membre_id, $startDate = null, $endDate = null)
+    {
         $sql = "SELECT SUM(amount) as total FROM income_transactions WHERE membre_id = :membre_id";
         $params = [':membre_id' => $membre_id];
 
@@ -40,8 +44,9 @@ class Dashboard {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total'] ?? 0;
     }
-    
-    private function getFixedPaymentIncome($membre_id, $startDate = null, $endDate = null) {
+
+    private function getFixedPaymentIncome($membre_id, $startDate = null, $endDate = null)
+    {
         // If no date range specified, assume current month
         if (!$startDate) {
             $startDate = date('Y-m-01'); // First day of current month
@@ -49,7 +54,7 @@ class Dashboard {
         if (!$endDate) {
             $endDate = date('Y-m-t');    // Last day of current month
         }
-        
+
         $sql = "SELECT 
                     pf.amount, 
                     pf.frequency, 
@@ -62,41 +67,42 @@ class Dashboard {
                     AND pf.status = 'active' 
                     AND pf.start_date <= :end_date 
                     AND (pf.end_date IS NULL OR pf.end_date = '0000-00-00' OR pf.end_date >= :start_date)";
-                    
+
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
         $stmt->bindValue(':start_date', $startDate);
         $stmt->bindValue(':end_date', $endDate);
         $stmt->execute();
         $payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         // Calculate prorated monthly equivalent for each fixed payment
         $startDateObj = new DateTime($startDate);
         $endDateObj = new DateTime($endDate);
         $daysInPeriod = $endDateObj->diff($startDateObj)->days + 1;
         $daysInMonth = date('t', strtotime($startDate));
         $monthRatio = $daysInPeriod / $daysInMonth;
-        
+
         $totalAmount = 0;
         foreach ($payments as $payment) {
             $amount = $payment['amount'];
             $frequency = strtolower($payment['frequency']);
-            
+
             // Convert frequency to monthly equivalent
             $monthlyAmount = $this->getMonthlyEquivalent($amount, $frequency);
-            
+
             // Apply proration if not a full month
             if ($daysInPeriod < $daysInMonth) {
                 $monthlyAmount = $monthlyAmount * $monthRatio;
             }
-            
+
             $totalAmount += $monthlyAmount;
         }
-        
+
         return $totalAmount;
     }
-    
-    private function getMonthlyEquivalent($amount, $frequency) {
+
+    private function getMonthlyEquivalent($amount, $frequency)
+    {
         switch ($frequency) {
             case 'monthly':
             case 'mensuel':
@@ -122,20 +128,22 @@ class Dashboard {
         }
     }
 
-    public function getTotalExpense($startDate = null, $endDate = null) {
+    public function getTotalExpense($startDate = null, $endDate = null)
+    {
         global $id_oo;
-        
+
         // 1. Get expenses from one-time transactions
         $transactionTotal = $this->getTransactionExpense($id_oo, $startDate, $endDate);
-        
+
         // 2. Get expenses from fixed expenses
         $fixedExpenseTotal = $this->getFixedExpenseTotal($id_oo, $startDate, $endDate);
-        
+
         // Return combined total
         return $transactionTotal + $fixedExpenseTotal;
     }
-    
-    private function getTransactionExpense($membre_id, $startDate = null, $endDate = null) {
+
+    private function getTransactionExpense($membre_id, $startDate = null, $endDate = null)
+    {
         $sql = "SELECT SUM(amount) as total FROM expense_transactions WHERE membre_id = :membre_id";
         $params = [':membre_id' => $membre_id];
 
@@ -154,8 +162,9 @@ class Dashboard {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total'] ?? 0;
     }
-    
-    private function getFixedExpenseTotal($membre_id, $startDate = null, $endDate = null) {
+
+    private function getFixedExpenseTotal($membre_id, $startDate = null, $endDate = null)
+    {
         // If no date range specified, assume current month
         if (!$startDate) {
             $startDate = date('Y-m-01'); // First day of current month
@@ -163,7 +172,7 @@ class Dashboard {
         if (!$endDate) {
             $endDate = date('Y-m-t');    // Last day of current month
         }
-        
+
         $sql = "SELECT 
                     df.amount, 
                     df.frequency, 
@@ -176,75 +185,77 @@ class Dashboard {
                     AND df.status = 'active' 
                     AND df.start_date <= :end_date 
                     AND (df.end_date IS NULL OR df.end_date = '0000-00-00' OR df.end_date >= :start_date)";
-                    
+
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
         $stmt->bindValue(':start_date', $startDate);
         $stmt->bindValue(':end_date', $endDate);
         $stmt->execute();
         $expenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         // Calculate prorated monthly equivalent for each fixed expense
         $startDateObj = new DateTime($startDate);
         $endDateObj = new DateTime($endDate);
         $daysInPeriod = $endDateObj->diff($startDateObj)->days + 1;
         $daysInMonth = date('t', strtotime($startDate));
         $monthRatio = $daysInPeriod / $daysInMonth;
-        
+
         $totalAmount = 0;
         foreach ($expenses as $expense) {
             $amount = $expense['amount'];
             $frequency = strtolower($expense['frequency']);
-            
+
             // Convert frequency to monthly equivalent
             $monthlyAmount = $this->getMonthlyEquivalent($amount, $frequency);
-            
+
             // Apply proration if not a full month
             if ($daysInPeriod < $daysInMonth) {
                 $monthlyAmount = $monthlyAmount * $monthRatio;
             }
-            
+
             $totalAmount += $monthlyAmount;
         }
-        
+
         return $totalAmount;
     }
 
-    public function getRecentTransactions($limit = 5) {
+    public function getRecentTransactions($limit = 5)
+    {
         global $id_oo;
-        
+
         // 1. Get recent one-time income transactions
         $incomeTransactions = $this->getRecentIncomeTransactions($id_oo, $limit);
-        
+
         // 2. Get recent fixed income payments
         $fixedIncomePayments = $this->getRecentFixedIncomePayments($id_oo, $limit);
-        
+
         // 3. Get recent one-time expense transactions
         $expenseTransactions = $this->getRecentExpenseTransactions($id_oo, $limit);
-        
+
         // 4. Get recent fixed expenses
         $fixedExpenses = $this->getRecentFixedExpenses($id_oo, $limit);
-        
+
         // 5. Combine all transactions
         $allTransactions = array_merge(
-            $incomeTransactions, 
-            $fixedIncomePayments, 
-            $expenseTransactions, 
+            $incomeTransactions,
+            $fixedIncomePayments,
+            $expenseTransactions,
             $fixedExpenses
         );
-        
+
         // 6. Sort by date (newest first)
-        usort($allTransactions, function($a, $b) {
+        usort($allTransactions, function ($a, $b) {
             $dateA = isset($a['transaction_date']) ? $a['transaction_date'] : $a['start_date'];
             $dateB = isset($b['transaction_date']) ? $b['transaction_date'] : $b['start_date'];
             return strtotime($dateB) - strtotime($dateA);
         });
-        
+
         // 7. Return only the specified limit
         return array_slice($allTransactions, 0, $limit);
     }
-    
-    private function getRecentIncomeTransactions($membre_id, $limit) {
+
+    private function getRecentIncomeTransactions($membre_id, $limit)
+    {
         $query = "
             SELECT 
                 i.id, 
@@ -259,15 +270,16 @@ class Dashboard {
             ORDER BY i.transaction_date DESC
             LIMIT :limit
         ";
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    private function getRecentFixedIncomePayments($membre_id, $limit) {
+
+    private function getRecentFixedIncomePayments($membre_id, $limit)
+    {
         $query = "
             SELECT 
                 p.id, 
@@ -284,15 +296,16 @@ class Dashboard {
             ORDER BY p.created_at DESC
             LIMIT :limit
         ";
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    private function getRecentExpenseTransactions($membre_id, $limit) {
+
+    private function getRecentExpenseTransactions($membre_id, $limit)
+    {
         $query = "
             SELECT 
                 e.id, 
@@ -307,15 +320,16 @@ class Dashboard {
             ORDER BY e.transaction_date DESC
             LIMIT :limit
         ";
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    private function getRecentFixedExpenses($membre_id, $limit) {
+
+    private function getRecentFixedExpenses($membre_id, $limit)
+    {
         $query = "
             SELECT 
                 d.id, 
@@ -332,7 +346,7 @@ class Dashboard {
             ORDER BY d.created_at DESC
             LIMIT :limit
         ";
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -340,31 +354,33 @@ class Dashboard {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getCategoryTotals($type = 'expense') {
+    public function getCategoryTotals($type = 'expense')
+    {
         global $id_oo;
-        
+
         if ($type == 'income') {
             // Get one-time income totals by category
             $transactionTotals = $this->getIncomeCategoryTotals($id_oo);
-            
+
             // Get fixed income totals by category
             $fixedTotals = $this->getFixedIncomeCategoryTotals($id_oo);
-            
+
             // Merge the results
             return $this->mergeCategoryTotals($transactionTotals, $fixedTotals);
         } else {
             // Get one-time expense totals by category
             $transactionTotals = $this->getExpenseCategoryTotals($id_oo);
-            
+
             // Get fixed expense totals by category
             $fixedTotals = $this->getFixedExpenseCategoryTotals($id_oo);
-            
+
             // Merge the results
             return $this->mergeCategoryTotals($transactionTotals, $fixedTotals);
         }
     }
-    
-    private function getIncomeCategoryTotals($membre_id) {
+
+    private function getIncomeCategoryTotals($membre_id)
+    {
         $query = "
             SELECT c.name as category, SUM(t.amount) as total
             FROM income_transactions t
@@ -373,14 +389,15 @@ class Dashboard {
             GROUP BY t.category_id
             ORDER BY total DESC
         ";
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    private function getExpenseCategoryTotals($membre_id) {
+
+    private function getExpenseCategoryTotals($membre_id)
+    {
         $query = "
             SELECT c.name as category, SUM(t.amount) as total
             FROM expense_transactions t
@@ -389,14 +406,15 @@ class Dashboard {
             GROUP BY t.category_id
             ORDER BY total DESC
         ";
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    private function getFixedIncomeCategoryTotals($membre_id) {
+
+    private function getFixedIncomeCategoryTotals($membre_id)
+    {
         // Calculate the monthly equivalent for each fixed income
         $query = "
             SELECT 
@@ -408,31 +426,32 @@ class Dashboard {
             WHERE p.membre_id = :membre_id
             AND p.status = 'active'
         ";
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
         $stmt->execute();
         $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         $totals = [];
         foreach ($items as $item) {
             $category = $item['category'];
             $monthlyAmount = $this->getMonthlyEquivalent($item['amount'], $item['frequency']);
-            
+
             if (!isset($totals[$category])) {
                 $totals[$category] = [
                     'category' => $category,
                     'total' => 0
                 ];
             }
-            
+
             $totals[$category]['total'] += $monthlyAmount;
         }
-        
+
         return array_values($totals);
     }
-    
-    private function getFixedExpenseCategoryTotals($membre_id) {
+
+    private function getFixedExpenseCategoryTotals($membre_id)
+    {
         // Calculate the monthly equivalent for each fixed expense
         $query = "
             SELECT 
@@ -444,47 +463,48 @@ class Dashboard {
             WHERE d.membre_id = :membre_id
             AND d.status = 'active'
         ";
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
         $stmt->execute();
         $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         $totals = [];
         foreach ($items as $item) {
             $category = $item['category'];
             $monthlyAmount = $this->getMonthlyEquivalent($item['amount'], $item['frequency']);
-            
+
             if (!isset($totals[$category])) {
                 $totals[$category] = [
                     'category' => $category,
                     'total' => 0
                 ];
             }
-            
+
             $totals[$category]['total'] += $monthlyAmount;
         }
-        
+
         return array_values($totals);
     }
-    
-    private function mergeCategoryTotals($totals1, $totals2) {
+
+    private function mergeCategoryTotals($totals1, $totals2)
+    {
         $mergedTotals = [];
-        
+
         // Process the first set of totals
         foreach ($totals1 as $item) {
             $category = $item['category'];
-            $mergedTotals[$category] = isset($mergedTotals[$category]) ? 
-                                      $mergedTotals[$category] + $item['total'] : $item['total'];
+            $mergedTotals[$category] = isset($mergedTotals[$category]) ?
+                $mergedTotals[$category] + $item['total'] : $item['total'];
         }
-        
+
         // Process the second set of totals
         foreach ($totals2 as $item) {
             $category = $item['category'];
-            $mergedTotals[$category] = isset($mergedTotals[$category]) ? 
-                                      $mergedTotals[$category] + $item['total'] : $item['total'];
+            $mergedTotals[$category] = isset($mergedTotals[$category]) ?
+                $mergedTotals[$category] + $item['total'] : $item['total'];
         }
-        
+
         // Convert back to array of arrays
         $result = [];
         foreach ($mergedTotals as $category => $total) {
@@ -493,12 +513,12 @@ class Dashboard {
                 'total' => $total
             ];
         }
-        
+
         // Sort by total descending
-        usort($result, function($a, $b) {
+        usort($result, function ($a, $b) {
             return $b['total'] - $a['total'];
         });
-        
+
         return $result;
     }
 }

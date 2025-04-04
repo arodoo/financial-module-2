@@ -32,8 +32,14 @@
             <div class="card-body">
                 <h5 class="card-title">Valeur des Actifs</h5>
                 <h3 class="card-text">€<?php echo number_format($totalAssetValue, 2); ?></h3>
-                <p class="card-text"><small><a href="?action=asset-management" class="text-white">Voir Détails</a></small></p>
+                <p class="card-text"><small><a href="/Gestion-Actifs" class="text-white">Voir Détails</a></small></p>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .card-text{
+        color: white;
+    }
+</style>

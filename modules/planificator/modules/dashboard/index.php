@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../models/Membre.php';
 require_once __DIR__ . '/../../models/Asset.php';
 require_once __DIR__ . '/../../models/Loan.php';
 
+
 // Initialize models
 $dashboardModel = new Dashboard();
 $membreModel = new Membre();
@@ -33,9 +34,7 @@ $assetsByCategory = $assetModel->getAssetsByCategory();
 // Load widget components
 include __DIR__ . '/widgets/summary-header.php';
 include __DIR__ . '/widgets/summary-cards.php';
-include __DIR__ . '/widgets/fixed-payments-summary.php'; // Added new fixed payments widget
-include __DIR__ . '/widgets/loan-summary.php';
-/* include __DIR__ . '/widgets/school-fee-summary.php'; */
+
 ?>
 
 <div class="row">
@@ -44,7 +43,9 @@ include __DIR__ . '/widgets/loan-summary.php';
     include __DIR__ . '/widgets/expense-categories.php';
     ?>
 </div>
-
+<?php
+include __DIR__ . '/widgets/fixed-payments-summary.php'; 
+?>
 <?php 
 if (!empty($assetsByCategory)) {
     include __DIR__ . '/widgets/asset-summary.php';

@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Aperçu des Actifs</h5>
-                <a href="?action=asset-management" class="btn btn-sm btn-outline-primary">Gérer les Actifs</a>
+                <a href="/Gestion-Actifs" class="btn btn-sm btn-outline-primary">Gérer les Actifs</a>
             </div>
             <div class="card-body">
                 <div class="row">

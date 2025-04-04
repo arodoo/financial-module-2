@@ -27,9 +27,9 @@
                     </table>
                 </div>
             <?php endif; ?>
-            <div class="text-center mt-3">
+            <!-- <div class="text-center mt-3">
                 <a href="?action=income-expense" class="btn btn-sm btn-outline-primary">Voir Rapport Détaillé</a>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

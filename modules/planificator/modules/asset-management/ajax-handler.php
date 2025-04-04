@@ -97,7 +97,7 @@ if (isset($user) || !empty($_SESSION['4M8e7M5b1R2e8s'])) {
                         $result = $assetController->saveAsset($_POST);
                         if ($result) {
                             $response['success'] = true;
-                            $response['message'] = 'Actif enregistré avec succès (ID: ' . $result . ')';
+                            $response['message'] = 'Actif enregistré avec succès';
                             $response['data'] = $result;
                             unset($response['error']);
                         } else {

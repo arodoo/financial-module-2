@@ -87,14 +87,6 @@ function generateProjection() {
     const timestamp = new Date().getTime();
     const ajaxUrl = `/Planificator/modules/financial-projection/ajax-handler.php?_=${timestamp}`;
     
-    console.log('Using direct AJAX URL:', ajaxUrl);
-    
-    // Debug form data
-    console.log('Form data:');
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-    }
-    
     // Add action parameter to form data
     formData.append('action', 'generate_projection');
     
@@ -109,41 +101,22 @@ function generateProjection() {
         credentials: 'same-origin'
     })
     .then(response => {
-        // Debug response details
-        console.log('Response status:', response.status, response.statusText);
-        console.log('Response type:', response.type);
-        console.log('Response URL:', response.url);
-        
-        // First check if response is OK
         if (!response.ok) {
             throw new Error(`Server returned ${response.status}: ${response.statusText}`);
         }
         
-        // Get response content type
-        const contentType = response.headers.get('content-type');
-        console.log('Response content type:', contentType);
-        
-        // Get text first for debugging
         return response.text().then(text => {
-            console.log('Response preview (first 100 chars):', text.substring(0, 100));
-            
             try {
-                // Try to parse as JSON
                 if (!text.trim()) {
                     throw new Error('Empty response from server');
                 }
                 
-                // Check for HTML in response
                 if (text.includes('<!DOCTYPE html>') || text.includes('<html')) {
-                    console.error('Server returned HTML instead of JSON. First 1000 chars:');
-                    console.error(text.substring(0, 1000));
                     throw new Error('Server returned HTML instead of JSON. Check server logs.');
                 }
                 
                 return JSON.parse(text);
             } catch (e) {
-                console.error('Failed to parse JSON:', e);
-                console.error('Raw response:', text.substring(0, 1000));
                 throw new Error(`Invalid JSON response: ${e.message}`);
             }
         });
@@ -160,14 +133,11 @@ function generateProjection() {
             
             // Hide loading indicators
             hideLoading();
-            
-            console.log('Projection updated successfully');
         } else {
             throw new Error(data.error || 'Unknown error occurred');
         }
     })
     .catch(error => {
-        console.error('Projection error:', error);
         hideLoading();
         showError(`Failed to generate projection: ${error.message}`);
     });

@@ -26,38 +26,16 @@
     </div>
 </div>
 
-<!-- Date Filter Form -->
-<div class="card mb-4">
-    <div class="card-body">
-        <form method="GET" class="row g-3">
-            <input type="hidden" name="action" value="income-expense">
-            <input type="hidden" name="filter" value="1">
-            
-            <div class="col-md-4">
-                <label for="start_date" class="form-label">Date de Début</label>
-                <input type="date" class="form-control" id="start_date" name="start_date" value="<?php echo $startDate; ?>">
-            </div>
-            <div class="col-md-4">
-                <label for="end_date" class="form-label">Date de Fin</label>
-                <input type="date" class="form-control" id="end_date" name="end_date" value="<?php echo $endDate; ?>">
-            </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary">Appliquer Filtre</button>
-            </div>
-        </form>
-    </div>
-</div>
-
 <!-- Tabs -->
 <ul class="nav nav-tabs mb-3" id="financeTab" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="income-tab" data-bs-toggle="tab" data-bs-target="#income" type="button">
-            Gestion des Revenus
+        <button class="nav-link active" id="income-tab" data-bs-toggle="tab" data-bs-target="#income" type="button" role="tab" aria-controls="income" aria-selected="true">
+            <i class="fas fa-arrow-down text-success"></i> Gestion des Revenus
         </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="expense-tab" data-bs-toggle="tab" data-bs-target="#expense" type="button">
-            Gestion des Dépenses
+        <button class="nav-link" id="expense-tab" data-bs-toggle="tab" data-bs-target="#expense" type="button" role="tab" aria-controls="expense" aria-selected="false">
+            <i class="fas fa-arrow-up text-danger"></i> Gestion des Dépenses
         </button>
     </li>
 </ul>

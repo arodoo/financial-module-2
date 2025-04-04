@@ -23,7 +23,7 @@ $categoryTableName = $type === 'payment' ? 'paiement_categories' : 'depense_cate
 $itemLabel = $type === 'payment' ? 'Paiement' : 'Dépense';
 $itemLabelPlural = $type === 'payment' ? 'Paiements' : 'Dépenses';
 
-// Include the unified controller
+// Include the unified controller and instantiate with type
 require_once __DIR__ . '/../../controllers/FixedItemController.php';
 $controller = new FixedItemController($type);
 

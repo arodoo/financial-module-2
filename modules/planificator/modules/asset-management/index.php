@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Actually check if the save was successful
             $result = $assetController->saveAsset($_POST);
             if ($result) {
-                $flashMessage = 'Actif enregistré avec succès! (ID: ' . $result . ')';
+                $flashMessage = 'Actif enregistré avec succès!';
                 $flashType = 'success';
             } else {
                 $flashMessage = 'Erreur lors de l\'enregistrement de l\'actif. Veuillez réessayer.';
@@ -335,6 +335,11 @@ window.submitAssetForm = function(event) {
             editModal.hide();
         }
         
+        // Instead of immediate reload, set a session flag and then reload
+        // This ensures the flash message will be displayed after the page reloads
+        // Create a temporary cookie or local storage item
+        sessionStorage.setItem('asset_update_success', 'true');
+        
         // Refresh the page after a short delay - matches income-expense behavior
         location.reload();
     })
@@ -347,6 +352,29 @@ window.submitAssetForm = function(event) {
 // Clean up modal when closed - matching income-expense pattern
 $('#editAssetModal').on('hidden.bs.modal', function() {
     $('#edit-asset-form-container').empty();
+});
+
+// Check for successful asset update after page load
+document.addEventListener('DOMContentLoaded', function() {
+    if (sessionStorage.getItem('asset_update_success') === 'true') {
+        // Clear the flag
+        sessionStorage.removeItem('asset_update_success');
+        
+        // Create and show the success message manually
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-success alert-dismissible fade show';
+        alertDiv.role = 'alert';
+        alertDiv.innerHTML = `
+            Actif mis à jour avec succès!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        // Insert at the beginning of the main content
+        const container = document.querySelector('.row');
+        if (container) {
+            container.parentNode.insertBefore(alertDiv, container);
+        }
+    }
 });
 </script>
 

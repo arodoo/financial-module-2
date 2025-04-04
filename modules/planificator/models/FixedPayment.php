@@ -13,13 +13,6 @@ class FixedPayment {
     public function __construct() {
         // Use getDbConnection() just like Asset model does
         $this->conn = getDbConnection();
-        
-        // Log connection status for debugging
-        if (!$this->conn) {
-            error_log('ERROR: Database connection is null in FixedPayment model');
-        } else {
-            error_log('SUCCESS: Database connection established in FixedPayment model');
-        }
     }
     
     /**
@@ -29,7 +22,6 @@ class FixedPayment {
      */
     public function getAllPayments($membre_id = null) {
         if (!$this->conn) {
-            error_log('Database connection is null in getAllPayments');
             return [];
         }
         
@@ -40,18 +32,17 @@ class FixedPayment {
                     LEFT JOIN paiement_categories pc ON pf.category_id = pc.id";
             
             if ($membre_id) {
-                $sql .= " WHERE pf.membre_id = :membre_id ORDER BY pf.name";
+                $sql .= " WHERE pf.membre_id = :membre_id ORDER BY pf.id DESC";
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
             } else {
-                $sql .= " ORDER BY pf.name";
+                $sql .= " ORDER BY pf.id DESC";
                 $stmt = $this->conn->prepare($sql);
             }
             
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            error_log('Error in getAllPayments: ' . $e->getMessage());
             return [];
         }
     }
@@ -65,7 +56,6 @@ class FixedPayment {
         global $id_oo;
         
         if (!$this->conn) {
-            error_log('Database connection is null in getPaymentById');
             return false;
         }
         
@@ -81,7 +71,6 @@ class FixedPayment {
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            error_log('Error in getPaymentById: ' . $e->getMessage());
             return false;
         }
     }
@@ -93,14 +82,10 @@ class FixedPayment {
      */
     public function addPayment($data) {
         if (!$this->conn) {
-            error_log('Database connection is null in addPayment');
             return false;
         }
         
         try {
-            // Debug log similar to Asset model
-            error_log("Payment data before save: " . print_r($data, true));
-            
             $sql = "INSERT INTO paiements_fixes (membre_id, category_id, name, amount, currency, 
                     frequency, payment_day, start_date, end_date, status, notes) 
                     VALUES (:membre_id, :category_id, :name, :amount, :currency, 
@@ -123,16 +108,11 @@ class FixedPayment {
             
             if ($stmt->execute()) {
                 $newId = $this->conn->lastInsertId();
-                error_log("Payment created with ID: $newId");
                 return $newId;
             }
             
-            // Get detailed error info like Asset model does
-            $errorInfo = $stmt->errorInfo();
-            error_log('Failed to add payment: ' . print_r($errorInfo, true));
             return false;
         } catch (Exception $e) {
-            error_log('Exception adding payment: ' . $e->getMessage());
             return false;
         }
     }
@@ -143,7 +123,6 @@ class FixedPayment {
      */
     public function getCategories() {
         if (!$this->conn) {
-            error_log('Database connection is null in getCategories');
             return [];
         }
         
@@ -153,7 +132,6 @@ class FixedPayment {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            error_log("Error fetching payment categories: " . $e->getMessage());
             return [];
         }
     }
@@ -165,15 +143,11 @@ class FixedPayment {
      */
     public function updatePayment($data) {
         if (!$this->conn) {
-            error_log('Database connection is null in updatePayment');
             return false;
         }
         
         try {
             global $id_oo;
-            
-            // Debug log like Asset model
-            error_log("Payment data for update: " . print_r($data, true));
             
             $sql = "UPDATE paiements_fixes 
                     SET category_id = :category_id, 
@@ -204,15 +178,8 @@ class FixedPayment {
             $stmt->bindValue(':id', $data['payment_id'], PDO::PARAM_INT);
             $stmt->bindValue(':membre_id', $id_oo, PDO::PARAM_INT);
             
-            $result = $stmt->execute();
-            if (!$result) {
-                // Get detailed error info like Asset model
-                $errorInfo = $stmt->errorInfo();
-                error_log("Update payment failed: " . print_r($errorInfo, true));
-            }
-            return $result;
+            return $stmt->execute();
         } catch (Exception $e) {
-            error_log("Error updating payment: " . $e->getMessage());
             return false;
         }
     }
@@ -224,7 +191,6 @@ class FixedPayment {
      */
     public function deletePayment($payment_id) {
         if (!$this->conn) {
-            error_log('Database connection is null in deletePayment');
             return false;
         }
         
@@ -236,15 +202,8 @@ class FixedPayment {
             $stmt->bindValue(':id', $payment_id, PDO::PARAM_INT);
             $stmt->bindValue(':membre_id', $id_oo, PDO::PARAM_INT);
             
-            $result = $stmt->execute();
-            if (!$result) {
-                // Get detailed error info like Asset model
-                $errorInfo = $stmt->errorInfo();
-                error_log("Delete payment failed: " . print_r($errorInfo, true));
-            }
-            return $result;
+            return $stmt->execute();
         } catch (Exception $e) {
-            error_log("Error deleting payment: " . $e->getMessage());
             return false;
         }
     }
@@ -256,7 +215,6 @@ class FixedPayment {
      */
     public function getTotalPaymentAmount($membre_id = null) {
         if (!$this->conn) {
-            error_log('Database connection is null in getTotalPaymentAmount');
             return 0;
         }
         
@@ -275,7 +233,6 @@ class FixedPayment {
             
             return floatval($result['total'] ?? 0);
         } catch (Exception $e) {
-            error_log("Error getting total payment amount: " . $e->getMessage());
             return 0;
         }
     }
@@ -287,7 +244,6 @@ class FixedPayment {
      */
     public function getPaymentsByCategory($membre_id = null) {
         if (!$this->conn) {
-            error_log('Database connection is null in getPaymentsByCategory');
             return [];
         }
         
@@ -316,7 +272,6 @@ class FixedPayment {
             
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            error_log("Error getting payments by category: " . $e->getMessage());
             return [];
         }
     }

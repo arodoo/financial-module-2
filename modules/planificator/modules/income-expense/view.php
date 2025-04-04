@@ -131,113 +131,108 @@ $(document).ready(function() {
         return formHtml;
     }
     
-    // Edit income transaction - complete form rebuild approach
-    $('#income').on('click', '.edit-transaction', function(e) {
-        e.preventDefault();
-        const transactionId = $(this).data('id');
+    // Fix DataTables when switching tabs
+    $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
+        const targetId = $(e.target).attr('data-bs-target');
         
-        $.ajax({
-            url: `${ajaxHandlerUrl}?action=get_income_transaction&id=${transactionId}`,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                if (data.success) {
-                    // Build a completely new form
-                    const formHtml = buildTransactionForm('income', data, incomeCategories);
-                    
-                    // Insert the form into the container
-                    $('#edit-income-form-container').html(formHtml);
-                    
-                    // Show the modal with the fresh form
-                    incomeModal.show();
-                } else {
-                    alert('Erreur: ' + data.error);
+        // Force a layout recalculation for any DataTables in the newly visible tab
+        setTimeout(function() {
+            $(targetId).find('table.dataTable').each(function() {
+                try {
+                    const dt = $(this).DataTable();
+                    if (dt) {
+                        dt.columns.adjust();
+                    }
+                } catch (e) {
+                    // Silent error handling
                 }
-            },
-            error: function(xhr, status, error) {
-                alert('Erreur lors de la récupération des données: ' + error);
-            }
-        });
-    });
-    
-    // Edit expense transaction - complete form rebuild approach
-    $('#expense').on('click', '.edit-transaction', function(e) {
-        e.preventDefault();
-        const transactionId = $(this).data('id');
-        
-        $.ajax({
-            url: `${ajaxHandlerUrl}?action=get_expense_transaction&id=${transactionId}`,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                if (data.success) {
-                    // Build a completely new form
-                    const formHtml = buildTransactionForm('expense', data, expenseCategories);
-                    
-                    // Insert the form into the container
-                    $('#edit-expense-form-container').html(formHtml);
-                    
-                    // Show the modal with the fresh form
-                    expenseModal.show();
-                } else {
-                    alert('Erreur: ' + data.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                alert('Erreur lors de la récupération des données: ' + error);
-            }
-        });
-    });
-    
-    // Delete income transaction
-    $('#income').on('click', '.delete-transaction', function(e) {
-        e.preventDefault();
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce revenu ?')) {
-            const transactionId = $(this).data('id');
+            });
             
-            $('<form>')
-                .attr({
-                    method: 'POST',
-                    style: 'display: none;'
-                })
-                .append($('<input>').attr({
-                    type: 'hidden',
-                    name: 'transaction_id',
-                    value: transactionId
-                }))
-                .append($('<input>').attr({
-                    type: 'hidden',
-                    name: 'delete_income',
-                    value: '1'
-                }))
-                .appendTo('body')
-                .submit();
+            // Make sure buttons are visible
+            $(targetId).find('.action-column button').css('display', 'inline-block');
+        }, 50);
+    });
+
+    // Critical fix: Use document delegation with the most specific selector possible
+    $(document).on('click', 'table .edit-transaction', function(e) {
+        e.preventDefault();
+        
+        // Find the closest tab pane to determine if we're in income or expense
+        const $tabPane = $(this).closest('.tab-pane');
+        const isIncome = $tabPane.attr('id') === 'income';
+        const transactionId = $(this).data('id');
+        
+        if (!transactionId) {
+            return;
         }
+        
+        // Set proper parameters based on transaction type
+        const action = isIncome ? 'get_income_transaction' : 'get_expense_transaction';
+        const categories = isIncome ? incomeCategories : expenseCategories;
+        const modal = isIncome ? incomeModal : expenseModal;
+        const type = isIncome ? 'income' : 'expense';
+        const formContainerId = isIncome ? 'edit-income-form-container' : 'edit-expense-form-container';
+        
+        $.ajax({
+            url: `${ajaxHandlerUrl}?action=${action}&id=${transactionId}`,
+            type: 'GET',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                if (data && data.success) {
+                    // Build form and show modal
+                    const formHtml = buildTransactionForm(type, data, categories);
+                    $(`#${formContainerId}`).html(formHtml);
+                    modal.show();
+                } else {
+                    alert(`Erreur: ${data && data.error ? data.error : 'Impossible de récupérer les données'}`);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Erreur lors de la récupération des données. Veuillez réessayer.');
+            }
+        });
     });
     
-    // Delete expense transaction
-    $('#expense').on('click', '.delete-transaction', function(e) {
+    // Also fix the delete handler to use the same approach
+    $(document).on('click', 'table .delete-transaction', function(e) {
         e.preventDefault();
-        if (confirm('Êtes-vous sûr de vouloir supprimer cette dépense ?')) {
-            const transactionId = $(this).data('id');
+        
+        // Find the closest tab pane to determine if we're in income or expense
+        const $tabPane = $(this).closest('.tab-pane');
+        const isIncome = $tabPane.attr('id') === 'income';
+        const transactionId = $(this).data('id');
+        
+        if (!transactionId) {
+            return;
+        }
+        
+        // Set confirmation message and form field name based on transaction type
+        const confirmMessage = isIncome 
+            ? 'Êtes-vous sûr de vouloir supprimer ce revenu ?'
+            : 'Êtes-vous sûr de vouloir supprimer cette dépense ?';
+        
+        const deleteFieldName = isIncome ? 'delete_income' : 'delete_expense';
+        
+        if (confirm(confirmMessage)) {
+            const form = $('<form>', {
+                method: 'POST',
+                style: 'display: none;'
+            });
             
-            $('<form>')
-                .attr({
-                    method: 'POST',
-                    style: 'display: none;'
-                })
-                .append($('<input>').attr({
-                    type: 'hidden',
-                    name: 'transaction_id',
-                    value: transactionId
-                }))
-                .append($('<input>').attr({
-                    type: 'hidden',
-                    name: 'delete_expense',
-                    value: '1'
-                }))
-                .appendTo('body')
-                .submit();
+            form.append($('<input>', {
+                type: 'hidden',
+                name: 'transaction_id',
+                value: transactionId
+            }));
+            
+            form.append($('<input>', {
+                type: 'hidden',
+                name: deleteFieldName,
+                value: '1'
+            }));
+            
+            form.appendTo('body').submit();
         }
     });
     
@@ -249,5 +244,11 @@ $(document).ready(function() {
     $('#editExpenseModal').on('hidden.bs.modal', function() {
         $('#edit-expense-form-container').empty();
     });
+    
+    // Add a helper function to check if a table contains data
+    window.hasDataTableData = function(tableId) {
+        const $table = $('#' + tableId);
+        return $table.find('tbody tr').not('.no-data-row').length > 0;
+    };
 });
 </script>
