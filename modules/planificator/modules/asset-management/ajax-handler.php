@@ -1,5 +1,9 @@
 <?php
-// Start output buffering to prevent any unwanted output - matches income-expense pattern
+// Prevent any notices or warnings from being output
+error_reporting(E_ERROR);
+ini_set('display_errors', 0);
+
+// Start output buffering to prevent any unwanted output
 ob_start();
 
 // Include main configuration files
@@ -11,7 +15,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/Configurations_modules.php';
 $dir_fonction = $_SERVER['DOCUMENT_ROOT'] . '/';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/function/INCLUDE-FUNCTION-HAUT-CMS-CODI-ONE.php';
 
-// Default response - standardized with income-expense module
+// Default response
 $response = [
     'success' => false,
     'error' => 'Default error state',
@@ -19,24 +23,49 @@ $response = [
     'data' => null
 ];
 
-// Only proceed if the user is logged in (like in income-expense module)
-if (isset($user) || !empty($_SESSION['4M8e7M5b1R2e8s'])) {
-    // Clear any previous output that might have occurred during includes
-    ob_clean();
-    
-    try {
-        // Since this is only accessed via AJAX, we require these files here
+// Only proceed if the user is logged in
+try {
+    if (isset($user) || !empty($_SESSION['4M8e7M5b1R2e8s'])) {
+        // Clear any previous output that might have occurred during includes
+        ob_clean();
+        
+        // Include necessary controller and model files
         require_once __DIR__ . '/../../controllers/AssetController.php';
         require_once __DIR__ . '/../../models/Asset.php';
 
         // Initialize the controller
         $assetController = new AssetController();
         
-        // Process AJAX requests based on action parameter (like income-expense)
-        if (isset($_GET['action'])) {
-            $action = $_GET['action'];
+        // Process AJAX requests based on action parameter
+        if (isset($_GET['action']) || isset($_POST['action'])) {
+            $action = isset($_GET['action']) ? $_GET['action'] : $_POST['action'];
             
             switch ($action) {
+                case 'get_assets_list':
+                    // Get all assets for DataTable
+                    $assets = $assetController->getAssets();
+                    
+                    // Get categories to merge with asset data
+                    $categories = $assetController->getCategories();
+                    $categoriesMap = [];
+                    
+                    // Create a map of category IDs to names
+                    foreach ($categories as $category) {
+                        $categoriesMap[$category['id']] = $category['name'];
+                    }
+                    
+                    // Add category name to each asset
+                    foreach ($assets as &$asset) {
+                        $asset['category_name'] = isset($categoriesMap[$asset['category_id']]) 
+                            ? $categoriesMap[$asset['category_id']] 
+                            : 'Non catégorisé';
+                    }
+                    
+                    $response['data'] = $assets;
+                    $response['success'] = true;
+                    unset($response['error']);
+                    break;
+                    
                 case 'get_assets':
                     // Get all assets or filter by type/category
                     $type = $_REQUEST['type'] ?? null;
@@ -50,17 +79,30 @@ if (isset($user) || !empty($_SESSION['4M8e7M5b1R2e8s'])) {
                     // Get details of a specific asset
                     if (isset($_GET['asset_id'])) {
                         $asset = $assetController->getAssetById($_GET['asset_id']);
+                        error_log('Retrieved asset data: ' . print_r($asset, true)); // Debug log
+                        
                         if ($asset) {
-                            // Instead of direct assignment, copy all asset data and set success flag
-                            foreach ($asset as $key => $value) {
-                                $response[$key] = $value;
-                            }
+                            // Map database field names to UI field names
                             $response['success'] = true;
+                            $response['id'] = $asset['id'];
+                            $response['name'] = $asset['name'];
+                            $response['category_id'] = $asset['category_id'];
                             
-                            // Log field names for debugging
-                            error_log('Asset fields: ' . print_r(array_keys($asset), true));
+                            // Map the mismatched field names from database to UI
+                            $response['acquisition_date'] = $asset['purchase_date']; 
+                            $response['acquisition_value'] = $asset['purchase_value'];
+                            $response['valuation_date'] = $asset['last_valuation_date'];
+                            
+                            // These fields match the database column names
+                            $response['current_value'] = $asset['current_value'];
+                            $response['location'] = $asset['location'] ?? '';
+                            $response['notes'] = $asset['notes'] ?? '';
+                            
+                            // Also include categories for proper dropdown population
+                            $response['categories'] = $assetController->getCategories();
                             
                             unset($response['error']);
+                            error_log('Structured response with correct field mapping: ' . print_r($response, true));
                         } else {
                             $response['error'] = 'Actif non trouvé';
                         }
@@ -130,7 +172,6 @@ if (isset($user) || !empty($_SESSION['4M8e7M5b1R2e8s'])) {
                     if (isset($_REQUEST['asset_id'])) {
                         // Log the asset ID we're trying to delete
                         error_log('Attempting to delete asset ID: ' . $_REQUEST['asset_id']);
-                        
                         $result = $assetController->deleteAsset($_REQUEST['asset_id']);
                         if ($result) {
                             $response['success'] = true;
@@ -156,26 +197,18 @@ if (isset($user) || !empty($_SESSION['4M8e7M5b1R2e8s'])) {
                     break;
             }
         } else {
-            // If no action is specified, return an error (like income-expense)
+            // If no action is specified, return an error
             $response['error'] = 'No action specified';
         }
-    } catch (Exception $e) {
-        // Log the error and provide a generic message (like income-expense)
-        error_log('AJAX Error: ' . $e->getMessage());
-        $response['error'] = 'Une erreur est survenue lors du traitement de la demande.';
+    } else {
+        // If user is not logged in, return an error
+        $response['error'] = 'User not authenticated';
     }
-} else {
-    // User not logged in (like income-expense)
-    $response['error'] = 'Authentication required';
+} catch (Exception $e) {
+    $response['error'] = 'Exception: ' . $e->getMessage();
+    error_log('AJAX handler exception: ' . $e->getMessage());
 }
 
-// Set appropriate headers (like income-expense)
+// Set headers and output the JSON response
 header('Content-Type: application/json');
-header('Cache-Control: no-cache, must-revalidate');
-
-// Output the JSON response (like income-expense)
 echo json_encode($response);
-
-// End output buffering and send the response (like income-expense)
-ob_end_flush();
-?>

@@ -28,34 +28,7 @@ $nom_fichier_datatable = $tableTitle . "-" . date('d-m-Y', time());
                     </tr>
                 </tfoot>
                 <tbody>
-                    <?php foreach ($assets as $asset): 
-                        $categoryName = '';
-                        foreach ($categories as $category) {
-                            if ($category['id'] == $asset['category_id']) {
-                                $categoryName = $category['name'];
-                                break;
-                            }
-                        }
-                        $acquisitionDate = !empty($asset['purchase_date']) ? date('d/m/Y', strtotime($asset['purchase_date'])) : 'N/A';
-                    ?>
-                    <tr>
-                        <td>
-                            <?php echo htmlspecialchars($asset['name']); ?>
-                            <small class="d-block text-muted">Acquis: <?php echo $acquisitionDate; ?></small>
-                        </td>
-                        <td><?php echo htmlspecialchars($categoryName); ?></td>
-                        <td class="text-end"><?php echo number_format($asset['current_value'], 0, ',', ' '); ?>€</td>
-                        <td class="text-center action-column">
-                            <!-- Remove the view button, keep only edit and delete -->
-                            <button type="button" class="btn btn-sm btn-warning edit-asset" data-id="<?php echo $asset['id']; ?>" title="Modifier">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger delete-asset" data-id="<?php echo $asset['id']; ?>" title="Supprimer">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
+                    <!-- Data will be loaded via AJAX -->
                 </tbody>
             </table>
         </div>
@@ -72,6 +45,53 @@ $(document).ready(function() {
         dom: 'Bftipr',
         pageLength: 5,
         lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tous"]],
+        "processing": true,
+        "serverSide": false,
+        "ajax": {
+            "url": `<?php echo $ajaxHandlerUrl; ?>`,
+            "type": "GET",
+            "data": {
+                "action": "get_assets_list"
+            },
+            "dataSrc": function(json) {
+                return json.data || [];
+            }
+        },
+        "columns": [
+            { 
+                "data": null,
+                "render": function(data, type, row) {
+                    // Format the acquisition date
+                    let acquisitionDate = row.acquisition_date ? 
+                        new Date(row.acquisition_date).toLocaleDateString('fr-FR') : 'N/A';
+                    return `${row.name}<small class="d-block text-muted">Acquis: ${acquisitionDate}</small>`;
+                }
+            },
+            { "data": "category_name" },
+            { 
+                "data": "current_value",
+                "className": "text-end",
+                "render": function(data, type, row) {
+                    return new Intl.NumberFormat('fr-FR').format(data) + '€';
+                }
+            },
+            {
+                "data": null,
+                "className": "text-center action-column",
+                "orderable": false,
+                "searchable": false,
+                "render": function(data, type, row) {
+                    return `
+                        <button type="button" class="btn btn-sm btn-warning edit-asset" data-id="${row.id}" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger delete-asset" data-id="${row.id}" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                }
+            }
+        ],
         buttons: [
             {
                 extend: 'print',
@@ -136,6 +156,9 @@ $(document).ready(function() {
         }
     });
     
+    // Store the DataTable instance globally for access from other scripts
+    window['assetManagementTable'] = dataTable;
+    
     // Add search functionality for each column
     $('#<?php echo $tableId; ?> tfoot .search_table').each(function() {
         var title = $(this).text();
@@ -162,6 +185,9 @@ $(document).ready(function() {
         e.preventDefault();
         const assetId = $(this).data('id');
         
+        // Show loading indicator
+        $('#edit-asset-form-container').html('<div class="text-center"><div class="spinner-border text-primary" role="status"></div><p>Chargement...</p></div>');
+        
         $.ajax({
             url: `<?php echo $ajaxHandlerUrl; ?>`,
             type: 'GET',
@@ -171,6 +197,13 @@ $(document).ready(function() {
             },
             dataType: 'json',
             success: function(response) {
+                console.log("Full asset response:", response); // Enhanced logging
+                console.log("Asset fields available:", Object.keys(response));
+                console.log("acquisition_date:", response.acquisition_date);
+                console.log("acquisition_value:", response.acquisition_value);
+                console.log("category_id:", response.category_id);
+                console.log("valuation_date:", response.valuation_date);
+                
                 if (response.success) {
                     // Build the asset edit form
                     const formHtml = buildAssetForm(response);
@@ -178,7 +211,50 @@ $(document).ready(function() {
                     // Insert the form into the container
                     $('#edit-asset-form-container').html(formHtml);
                     
-                    // Initialize modal using bootstrap standard approach - matches income-expense
+                    // Load categories AFTER form is rendered
+                    $.ajax({
+                        url: `<?php echo $ajaxHandlerUrl; ?>`,
+                        type: 'GET',
+                        data: {
+                            action: 'get_categories'
+                        },
+                        dataType: 'json',
+                        success: function(categoriesResponse) {
+                            console.log("Categories response:", categoriesResponse);
+                            if (categoriesResponse.success && categoriesResponse.data) {
+                                const categoriesSelect = document.getElementById('category_id');
+                                if (categoriesSelect) {
+                                    // First clear any existing options except the default
+                                    while (categoriesSelect.options.length > 1) {
+                                        categoriesSelect.remove(1);
+                                    }
+                                    
+                                    // Then add category options and select the matching one
+                                    categoriesResponse.data.forEach(category => {
+                                        const option = document.createElement('option');
+                                        option.value = category.id;
+                                        option.textContent = category.name;
+                                        
+                                        // Explicitly log to debug
+                                        console.log(`Comparing category ID ${category.id} with asset category_id ${response.category_id}`);
+                                        
+                                        // Use strict equality to make sure the comparison works correctly
+                                        if (parseInt(category.id) === parseInt(response.category_id)) {
+                                            option.selected = true;
+                                            console.log(`Selected category: ${category.name}`);
+                                        }
+                                        
+                                        categoriesSelect.appendChild(option);
+                                    });
+                                }
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error("Categories load error:", xhr.responseText);
+                        }
+                    });
+                    
+                    // Initialize modal using bootstrap standard approach
                     const editModal = new bootstrap.Modal(document.getElementById('editAssetModal'));
                     editModal.show();
                     
@@ -187,38 +263,46 @@ $(document).ready(function() {
                         initCurrencyInputs();
                     }
                 } else {
-                    alert('Erreur: ' + (response.error || 'Une erreur est survenue'));
+                    popup_alert('Erreur: ' + (response.error || 'Une erreur est survenue'), "#ff0000", "#FFFFFF", "uk-icon-close");
                 }
             },
             error: function(xhr, status, error) {
-                alert('Erreur lors de la récupération des données: ' + error);
+                console.error('AJAX Error Response:', xhr.responseText);
+                popup_alert('Erreur lors de la récupération des données: ' + error, "#ff0000", "#FFFFFF", "uk-icon-close");
             }
         });
     });
     
-    // Delete asset - Fix parameter name to use asset_id instead of transaction_id
+    // Delete asset - using AJAX instead of form submission
     $(document).on('click', '.delete-asset', function() {
         const assetId = $(this).data('id');
         
         if (confirm('Êtes-vous sûr de vouloir supprimer cet actif?')) {
-            // Submit form for deletion - corrected field name
-            $('<form>')
-                .attr({
-                    method: 'POST',
-                    style: 'display: none;'
-                })
-                .append($('<input>').attr({
-                    type: 'hidden',
-                    name: 'asset_id',  // Correct field name that controller expects
-                    value: assetId
-                }))
-                .append($('<input>').attr({
-                    type: 'hidden',
-                    name: 'delete_asset',
-                    value: '1'
-                }))
-                .appendTo('body')
-                .submit();
+            $.ajax({
+                url: `<?php echo $ajaxHandlerUrl; ?>`,
+                type: 'POST',
+                data: {
+                    action: 'delete_asset',
+                    asset_id: assetId
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        // Show success message
+                        popup_alert('Actif supprimé avec succès', "green filledlight", "#009900", "uk-icon-check");
+                        
+                        // Reload the assets table
+                        dataTable.ajax.reload();
+                    } else {
+                        // Show error message
+                        popup_alert('Erreur: ' + (response.error || 'Une erreur est survenue'), "#ff0000", "#FFFFFF", "uk-icon-close");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Show network error
+                    popup_alert('Erreur lors de la suppression: ' + error, "#ff0000", "#FFFFFF", "uk-icon-close");
+                }
+            });
         }
     });
 });

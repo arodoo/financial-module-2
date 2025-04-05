@@ -9,7 +9,7 @@ $membre_id = $id_oo ?? 1; // Default to 1 if not set
 ?>
 
 <div class="card-body">
-    <form method="POST" id="asset-form">
+    <form method="POST" id="asset-form" onsubmit="submitNewAssetForm(event)">
         <?php if ($isEditMode): ?>
             <input type="hidden" name="asset_id" value="<?php echo $asset['id']; ?>">
         <?php endif; ?>
@@ -78,10 +78,16 @@ $membre_id = $id_oo ?? 1; // Default to 1 if not set
         
         <div class="d-flex justify-content-between">
             <?php if ($isEditMode): ?>
-                <button type="submit" name="update_asset" class="btn btn-warning">Mettre à jour</button>
+                <button type="submit" name="update_asset" class="btn btn-warning">
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    Mettre à jour
+                </button>
                 <a href="?action=asset-management" class="btn btn-secondary">Annuler</a>
             <?php else: ?>
-                <button type="submit" name="save_asset" class="btn btn-primary">Enregistrer</button>
+                <button type="submit" name="save_asset" class="btn btn-primary">
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    Enregistrer
+                </button>
             <?php endif; ?>
         </div>
     </form>
@@ -130,29 +136,73 @@ document.addEventListener('DOMContentLoaded', function() {
         updateVisibility(); // Run on page load
     }
     
-    // Add form submission preparation
-    const form = document.getElementById('asset-form');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            // Clean currency inputs before submission 
-            const currencyInputs = document.querySelectorAll('.currency-input');
-            currencyInputs.forEach(input => {
-                input.value = input.value.replace(/\s/g, '');
-            });
-            
-            // Log what we're submitting for debugging
-            console.log('Submitting asset form with data:', {
-                membre_id: form.elements['membre_id']?.value || 'not set',
-                name: form.elements['asset_name'].value,
-                category_id: form.elements['category_id'].value,
-                acquisition_date: form.elements['acquisition_date'].value,
-                acquisition_value: form.elements['acquisition_value'].value,
-                valuation_date: form.elements['valuation_date'].value,
-                current_value: form.elements['current_value'].value,
-                location: form.elements['location'].value,
-                notes: form.elements['notes'].value
-            });
+    // Function to submit the new asset form via AJAX
+    window.submitNewAssetForm = function(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        // Add appropriate action parameter
+        const isEdit = formData.has('asset_id');
+        formData.append('action', isEdit ? 'update_asset' : 'save_asset');
+        formData.append(isEdit ? 'update_asset' : 'save_asset', '1');
+        
+        // Show spinner and disable button
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const spinner = submitBtn.querySelector('.spinner-border');
+        submitBtn.disabled = true;
+        spinner.classList.remove('d-none');
+        
+        // Clean currency inputs for proper backend processing
+        const currencyInputs = form.querySelectorAll('.currency-input');
+        currencyInputs.forEach(input => {
+            const cleanValue = input.value.replace(/\s/g, '');
+            formData.set(input.name, cleanValue);
         });
-    }
+        
+        // Submit via AJAX
+        fetch('<?php echo $ajaxHandlerUrl; ?>', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(response => {
+            // Hide spinner and enable button
+            submitBtn.disabled = false;
+            spinner.classList.add('d-none');
+            
+            if (response.success) {
+                // Reset form for new entries
+                if (!isEdit) {
+                    form.reset();
+                }
+                
+                // Show success message
+                popup_alert(response.message || 'Actif enregistré avec succès', "green filledlight", "#FFFFFF", "uk-icon-check");
+                
+                // Reload the data table if it exists
+                if (window.assetManagementTable) {
+                    window.assetManagementTable.ajax.reload();
+                }
+            } else {
+                // Show error message
+                popup_alert(response.error || 'Une erreur est survenue', "#ff0000", "#FFFFFF", "uk-icon-close");
+            }
+        })
+        .catch(error => {
+            // Hide spinner and enable button
+            submitBtn.disabled = false;
+            spinner.classList.add('d-none');
+            
+            console.error('Error:', error);
+            popup_alert('Erreur lors de l\'enregistrement de l\'actif', "#ff0000", "#FFFFFF", "uk-icon-close");
+        });
+    };
 });
 </script>
