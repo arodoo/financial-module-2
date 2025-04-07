@@ -28,11 +28,13 @@ class FinancialProjectionController {
         $fixedIncomes = $this->model->getFixedIncomes();
         $fixedExpenses = $this->model->getFixedExpenses();
         $totalAssets = $this->model->getTotalAssets();
+        $currentBalance = $this->model->getCurrentBalance();
         
         return [
             'fixed_incomes' => $fixedIncomes,
             'fixed_expenses' => $fixedExpenses,
             'total_assets' => $totalAssets,
+            'current_balance' => $currentBalance,
             'default_projection' => $this->getDefaultProjection()
         ];
     }
@@ -57,7 +59,8 @@ class FinancialProjectionController {
             'income_growth_rate' => 2.0, // 2% annual growth
             'expense_inflation_rate' => 2.5, // 2.5% annual inflation
             'view_mode' => 'yearly',
-            'initial_balance' => null // Will use total assets by default
+            'initial_balance' => null, // Will use calculated balance
+            'include_assets' => false // Default to excluding assets
         ];
         
         return $this->model->generateProjection($defaultParams);

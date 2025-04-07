@@ -9,9 +9,9 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <!-- <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h4 class="mb-0"><i class="fas fa-chart-line me-2"></i> Projection Financière</h4>
-                </div>
+                </div> -->
                 <div class="card-body">
                     <p class="lead">
                         Visualisez l'évolution future de votre situation financière basée sur vos revenus et dépenses fixes.

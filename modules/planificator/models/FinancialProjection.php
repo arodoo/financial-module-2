@@ -136,10 +136,26 @@ class FinancialProjection {
         // Default parameters with fallbacks
         $startDate = new DateTime($params['start_date'] ?? 'now');
         $years = intval($params['years'] ?? 5);
-        $initialBalance = floatval($params['initial_balance'] ?? $this->getTotalAssets());
         $incomeGrowthRate = floatval($params['income_growth_rate'] ?? 2) / 100; // Convert percentage to decimal
         $expenseInflationRate = floatval($params['expense_inflation_rate'] ?? 2) / 100; // Convert percentage to decimal
         $viewMode = $params['view_mode'] ?? 'yearly'; // yearly, quarterly, monthly
+        
+        // Check if including assets and determine initial balance
+        $includeAssets = isset($params['include_assets']) ? (bool)$params['include_assets'] : false;
+        
+        // Calculate initial balance based on settings
+        if (isset($params['initial_balance']) && is_numeric($params['initial_balance'])) {
+            // Use the provided initial balance
+            $initialBalance = floatval($params['initial_balance']);
+        } else {
+            // Calculate from current income/expense balance
+            $initialBalance = $this->getCurrentBalance($startDate->format('Y-m-d'));
+            
+            // Add asset values if requested
+            if ($includeAssets) {
+                $initialBalance += $this->getTotalAssets();
+            }
+        }
         
         // Determine projection end date and interval
         $endDate = clone $startDate;
@@ -342,6 +358,48 @@ class FinancialProjection {
         
         $totalMonths = ($years * 12) + $months + ($days / 30);
         return max(0, $totalMonths);
+    }
+
+    /**
+     * Calculate the current balance of income and expenses
+     * @param string $startDate The start date for calculation
+     * @return float The current balance
+     */
+    public function getCurrentBalance($startDate = null) {
+        if (!$this->conn) return 0;
+        
+        if (!$startDate) {
+            $startDate = date('Y-m-d');
+        }
+        
+        try {
+            // Get total income until start date
+            $sql = "SELECT COALESCE(SUM(amount), 0) as total FROM income_transactions 
+                    WHERE membre_id = :membre_id AND transaction_date <= :start_date";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(':membre_id', $this->membre_id, PDO::PARAM_INT);
+            $stmt->bindValue(':start_date', $startDate, PDO::PARAM_STR);
+            $stmt->execute();
+            $incomeResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $totalIncome = floatval($incomeResult['total'] ?? 0);
+            
+            // Get total expenses until start date
+            $sql = "SELECT COALESCE(SUM(amount), 0) as total FROM expense_transactions 
+                    WHERE membre_id = :membre_id AND transaction_date <= :start_date";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(':membre_id', $this->membre_id, PDO::PARAM_INT);
+            $stmt->bindValue(':start_date', $startDate, PDO::PARAM_STR);
+            $stmt->execute();
+            $expenseResult = $stmt->fetch(PDO::FETCH_ASSOC);
+            $totalExpenses = floatval($expenseResult['total'] ?? 0);
+            
+            // Calculate balance
+            $balance = $totalIncome - $totalExpenses;
+            return $balance;
+        } catch (Exception $e) {
+            error_log('Error calculating current balance: ' . $e->getMessage());
+            return 0;
+        }
     }
 }
 ?>
