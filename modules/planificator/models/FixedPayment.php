@@ -32,11 +32,11 @@ class FixedPayment {
                     LEFT JOIN paiement_categories pc ON pf.category_id = pc.id";
             
             if ($membre_id) {
-                $sql .= " WHERE pf.membre_id = :membre_id ORDER BY pf.id DESC";
+                $sql .= " WHERE pf.membre_id = :membre_id ORDER BY pf.updated_at DESC";
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
             } else {
-                $sql .= " ORDER BY pf.id DESC";
+                $sql .= " ORDER BY pf.updated_at DESC";
                 $stmt = $this->conn->prepare($sql);
             }
             

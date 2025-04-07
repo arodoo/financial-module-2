@@ -265,8 +265,9 @@ $filename = $tableTitle . '-' . date('d-m-Y', time());
                     { 
                         "data": null,
                         "render": function(data, type, row) {
-                            // Just display the raw date string from the database without formatting
-                            let startDate = row.start_date ? row.start_date.split(' ')[0] : 'N/A';
+                            // Format the date using toLocaleDateString for consistent formatting
+                            let startDate = row.start_date ? 
+                                new Date(row.start_date).toLocaleDateString('fr-FR') : 'N/A';
                             return `${row.name}<small class="d-block text-muted">Début: ${startDate}</small>`;
                         }
                     },

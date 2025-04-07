@@ -32,11 +32,11 @@ class FixedDepense {
                     LEFT JOIN depense_categories dc ON df.category_id = dc.id";
             
             if ($membre_id) {
-                $sql .= " WHERE df.membre_id = :membre_id ORDER BY df.id DESC";
+                $sql .= " WHERE df.membre_id = :membre_id ORDER BY df.updated_at DESC";
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bindValue(':membre_id', $membre_id, PDO::PARAM_INT);
             } else {
-                $sql .= " ORDER BY df.id DESC";
+                $sql .= " ORDER BY df.updated_at DESC";
                 $stmt = $this->conn->prepare($sql);
             }
             

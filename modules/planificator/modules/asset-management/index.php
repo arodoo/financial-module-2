@@ -52,14 +52,11 @@ $flashType = null;
 // Process form submission - verify field names
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['save_asset'])) {
-        // Debugging for troubleshooting
-        error_log('Save asset data: ' . print_r($_POST, true));
-        
         // Map asset_name to name if needed
         if (isset($_POST['asset_name']) && !isset($_POST['name'])) {
             $_POST['name'] = $_POST['asset_name'];
         }
-        
+
         // Convert any dates from empty strings to NULL
         if (empty($_POST['acquisition_date'])) {
             $_POST['acquisition_date'] = date('Y-m-d');
@@ -67,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($_POST['valuation_date'])) {
             $_POST['valuation_date'] = date('Y-m-d');
         }
-        
+
         // Ensure we have values for required fields
         if (empty($_POST['name']) || empty($_POST['category_id'])) {
             $flashMessage = 'Erreur: Des champs requis sont manquants.';
@@ -182,34 +179,32 @@ $ajaxHandlerUrl = '/modules/planificator/modules/asset-management/ajax-handler.p
 
 <!-- Edit Asset Modal - Only keep this one modal -->
 <div class="modal fade" id="editAssetModal" tabindex="-1" aria-labelledby="editAssetModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="editAssetModalLabel">Modifier Actif</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div id="edit-asset-form-container"></div>
-      </div>
-      <!-- Modal footer removed to prevent duplicate buttons -->
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="editAssetModalLabel">Modifier Actif</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="edit-asset-form-container"></div>
+            </div>
+            <!-- Modal footer removed to prevent duplicate buttons -->
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Global JavaScript utilities for asset management -->
 <script>
-// Improved utility function to build asset form for editing - ensuring all fields are mapped correctly
-function buildAssetForm(data) {
-    console.log("Asset data for edit:", data); // Debug to see what data we're receiving
-    
-    // Set default values for fields that might be null
-    const acquisitionDate = data.acquisition_date || '';
-    const acquisitionValue = data.acquisition_value ? data.acquisition_value : '0';
-    const valuationDate = data.valuation_date || '';
-    const currentValue = data.current_value || '0';
-    
-    // Create a complete form with all elements
-    let formHtml = `
+    // Improved utility function to build asset form for editing - ensuring all fields are mapped correctly
+    function buildAssetForm(data) {
+        // Set default values for fields that might be null
+        const acquisitionDate = data.acquisition_date || '';
+        const acquisitionValue = data.acquisition_value ? data.acquisition_value : '0';
+        const valuationDate = data.valuation_date || '';
+        const currentValue = data.current_value || '0';
+
+        // Create a complete form with all elements
+        let formHtml = `
         <form id="edit-asset-form" method="POST" onsubmit="submitAssetForm(event)">
             <input type="hidden" name="asset_id" value="${data.id}">
             
@@ -223,21 +218,16 @@ function buildAssetForm(data) {
                 <label for="category_id" class="form-label">Catégorie</label>
                 <select class="form-select" id="category_id" name="category_id" required>
                     <option value="">Choisir une catégorie</option>`;
-                    
-    // Populate category options and set selected option
-    if (data.categories && data.categories.length) {
-        data.categories.forEach(category => {
-            const selected = parseInt(category.id) === parseInt(data.category_id) ? 'selected="selected"' : '';
-            console.log(`Comparing category ID ${category.id} with asset category_id ${data.category_id}`);
-            formHtml += `<option value="${category.id}" ${selected}>${category.name}</option>`;
-            
-            if (parseInt(category.id) === parseInt(data.category_id)) {
-                console.log(`Selected category: ${category.name}`);
-            }
-        });
-    }
-    
-    formHtml += `</select>
+
+        // Populate category options and set selected option
+        if (data.categories && data.categories.length) {
+            data.categories.forEach(category => {
+                const selected = parseInt(category.id) === parseInt(data.category_id) ? 'selected="selected"' : '';
+                formHtml += `<option value="${category.id}" ${selected}>${category.name}</option>`;
+            });
+        }
+
+        formHtml += `</select>
             </div>
             
             <div class="row">
@@ -290,125 +280,123 @@ function buildAssetForm(data) {
             </div>
         </form>
     `;
-    
-    return formHtml;
-}
 
-// Function to format currency values
-function formatCurrency(value) {
-    return value ? Number(value).toLocaleString('fr-FR') : '';
-}
+        return formHtml;
+    }
 
-// Initialize currency input formatter
-function initCurrencyInputs() {
-    const currencyInputs = document.querySelectorAll('.currency-input');
-    currencyInputs.forEach(input => {
-        // Format when typing
-        input.addEventListener('input', function(e) {
-            let value = this.value.replace(/\D/g, '');
-            this.value = new Intl.NumberFormat('fr-FR').format(value);
-        });
-        
-        // Clean before form submission
-        input.form?.addEventListener('submit', function() {
-            currencyInputs.forEach(inp => {
-                inp.value = inp.value.replace(/\s/g, '');
+    // Function to format currency values
+    function formatCurrency(value) {
+        return value ? Number(value).toLocaleString('fr-FR') : '';
+    }
+
+    // Initialize currency input formatter
+    function initCurrencyInputs() {
+        const currencyInputs = document.querySelectorAll('.currency-input');
+        currencyInputs.forEach(input => {
+            // Format when typing
+            input.addEventListener('input', function (e) {
+                let value = this.value.replace(/\D/g, '');
+                this.value = new Intl.NumberFormat('fr-FR').format(value);
+            });
+
+            // Clean before form submission
+            input.form?.addEventListener('submit', function () {
+                currencyInputs.forEach(inp => {
+                    inp.value = inp.value.replace(/\s/g, '');
+                });
             });
         });
-    });
-}
+    }
 
-// Function to submit the form via AJAX - standardized with income-expense pattern
-window.submitAssetForm = function(event) {
-    event.preventDefault();
-    
-    const form = event.target;
-    const formData = new FormData(form);
-    
-    // Add the update_asset parameter that would normally be submitted with the button
-    formData.append('update_asset', '1');
-    
-    // Add the action parameter to tell the AJAX handler what to do
-    formData.append('action', 'update_asset');
-    
-    // Show spinner and disable button
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const spinner = submitBtn.querySelector('.spinner-border');
-    submitBtn.disabled = true;
-    spinner.classList.remove('d-none');
-    
-    // Clean currency inputs for proper backend processing
-    const currencyInputs = form.querySelectorAll('.currency-input');
-    currencyInputs.forEach(input => {
-        const cleanValue = input.value.replace(/\s/g, '');
-        formData.set(input.name, cleanValue);
+    // Function to submit the form via AJAX - standardized with income-expense pattern
+    window.submitAssetForm = function (event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        // Add the update_asset parameter that would normally be submitted with the button
+        formData.append('update_asset', '1');
+
+        // Add the action parameter to tell the AJAX handler what to do
+        formData.append('action', 'update_asset');
+
+        // Show spinner and disable button
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const spinner = submitBtn.querySelector('.spinner-border');
+        submitBtn.disabled = true;
+        spinner.classList.remove('d-none');
+
+        // Clean currency inputs for proper backend processing
+        const currencyInputs = form.querySelectorAll('.currency-input');
+        currencyInputs.forEach(input => {
+            const cleanValue = input.value.replace(/\s/g, '');
+            formData.set(input.name, cleanValue);
+        });
+
+        // Submit via AJAX
+        fetch('<?php echo $ajaxHandlerUrl; ?>', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(response => {
+                // Hide spinner and enable button
+                submitBtn.disabled = false;
+                spinner.classList.add('d-none');
+
+                if (response.success) {
+                    // Close the modal
+                    const editModal = bootstrap.Modal.getInstance(document.getElementById('editAssetModal'));
+                    if (editModal) {
+                        editModal.hide();
+                    }
+
+                    // Show success message
+                    popup_alert(response.message || 'Actif mis à jour avec succès', "green filledlight", "#009900", "uk-icon-check");
+
+                    // Reload the data table
+                    if (window.assetManagementTable) {
+                        window.assetManagementTable.ajax.reload();
+                    }
+                } else {
+                    // Show error message
+                    popup_alert(response.error || 'Une erreur est survenue', "#ff0000", "#FFFFFF", "uk-icon-close");
+                }
+            })
+            .catch(error => {
+                // Hide spinner and enable button
+                submitBtn.disabled = false;
+                spinner.classList.add('d-none');
+
+                popup_alert('Erreur lors de la mise à jour de l\'actif', "#ff0000", "#FFFFFF", "uk-icon-close");
+            });
+    };
+
+    // Clean up modal when closed - matching income-expense pattern
+    $('#editAssetModal').on('hidden.bs.modal', function () {
+        $('#edit-asset-form-container').empty();
     });
-    
-    // Submit via AJAX
-    fetch('<?php echo $ajaxHandlerUrl; ?>', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(response => {
-        // Hide spinner and enable button
-        submitBtn.disabled = false;
-        spinner.classList.add('d-none');
-        
-        if (response.success) {
-            // Close the modal
-            const editModal = bootstrap.Modal.getInstance(document.getElementById('editAssetModal'));
-            if (editModal) {
-                editModal.hide();
+
+    // Initialize when document is ready
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize currency inputs
+        initCurrencyInputs();
+
+        // If there are pre-existing currency inputs, format them
+        document.querySelectorAll('.currency-input').forEach(input => {
+            if (input.value) {
+                let value = input.value.replace(/\D/g, '');
+                input.value = new Intl.NumberFormat('fr-FR').format(value);
             }
-            
-            // Show success message
-            popup_alert(response.message || 'Actif mis à jour avec succès', "green filledlight", "#009900", "uk-icon-check");
-            
-            // Reload the data table
-            if (window.assetManagementTable) {
-                window.assetManagementTable.ajax.reload();
-            }
-        } else {
-            // Show error message
-            popup_alert(response.error || 'Une erreur est survenue', "#ff0000", "#FFFFFF", "uk-icon-close");
-        }
-    })
-    .catch(error => {
-        // Hide spinner and enable button
-        submitBtn.disabled = false;
-        spinner.classList.add('d-none');
-        
-        console.error('Error:', error);
-        popup_alert('Erreur lors de la mise à jour de l\'actif', "#ff0000", "#FFFFFF", "uk-icon-close");
+        });
     });
-};
-
-// Clean up modal when closed - matching income-expense pattern
-$('#editAssetModal').on('hidden.bs.modal', function() {
-    $('#edit-asset-form-container').empty();
-});
-
-// Initialize when document is ready
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize currency inputs
-    initCurrencyInputs();
-    
-    // If there are pre-existing currency inputs, format them
-    document.querySelectorAll('.currency-input').forEach(input => {
-        if (input.value) {
-            let value = input.value.replace(/\D/g, '');
-            input.value = new Intl.NumberFormat('fr-FR').format(value);
-        }
-    });
-});
 </script>
 
 <!-- Include asset management JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-

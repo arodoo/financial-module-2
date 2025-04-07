@@ -62,8 +62,9 @@ $(document).ready(function() {
                 "data": null,
                 "render": function(data, type, row) {
                     // Format the acquisition date
-                    let acquisitionDate = row.acquisition_date ? 
-                        new Date(row.acquisition_date).toLocaleDateString('fr-FR') : 'N/A';
+                    // Fix: Check for purchase_date (database field) instead of acquisition_date
+                    let acquisitionDate = row.purchase_date ? 
+                        new Date(row.purchase_date).toLocaleDateString('fr-FR') : 'N/A';
                     return `${row.name}<small class="d-block text-muted">Acquis: ${acquisitionDate}</small>`;
                 }
             },
@@ -197,13 +198,6 @@ $(document).ready(function() {
             },
             dataType: 'json',
             success: function(response) {
-                console.log("Full asset response:", response); // Enhanced logging
-                console.log("Asset fields available:", Object.keys(response));
-                console.log("acquisition_date:", response.acquisition_date);
-                console.log("acquisition_value:", response.acquisition_value);
-                console.log("category_id:", response.category_id);
-                console.log("valuation_date:", response.valuation_date);
-                
                 if (response.success) {
                     // Build the asset edit form
                     const formHtml = buildAssetForm(response);
@@ -220,7 +214,6 @@ $(document).ready(function() {
                         },
                         dataType: 'json',
                         success: function(categoriesResponse) {
-                            console.log("Categories response:", categoriesResponse);
                             if (categoriesResponse.success && categoriesResponse.data) {
                                 const categoriesSelect = document.getElementById('category_id');
                                 if (categoriesSelect) {
@@ -235,13 +228,9 @@ $(document).ready(function() {
                                         option.value = category.id;
                                         option.textContent = category.name;
                                         
-                                        // Explicitly log to debug
-                                        console.log(`Comparing category ID ${category.id} with asset category_id ${response.category_id}`);
-                                        
                                         // Use strict equality to make sure the comparison works correctly
                                         if (parseInt(category.id) === parseInt(response.category_id)) {
                                             option.selected = true;
-                                            console.log(`Selected category: ${category.name}`);
                                         }
                                         
                                         categoriesSelect.appendChild(option);
@@ -250,7 +239,7 @@ $(document).ready(function() {
                             }
                         },
                         error: function(xhr) {
-                            console.error("Categories load error:", xhr.responseText);
+                            popup_alert('Erreur lors du chargement des catégories', "#ff0000", "#FFFFFF", "uk-icon-close");
                         }
                     });
                     
@@ -267,7 +256,6 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr, status, error) {
-                console.error('AJAX Error Response:', xhr.responseText);
                 popup_alert('Erreur lors de la récupération des données: ' + error, "#ff0000", "#FFFFFF", "uk-icon-close");
             }
         });
