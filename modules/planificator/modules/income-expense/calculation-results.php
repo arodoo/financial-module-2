@@ -4,7 +4,7 @@
         <div class="card border-primary">
             <div class="card-body text-center">
                 <h5 class="card-title text-primary">Revenu Total</h5>
-                <h3 class="card-text"><?php echo '€' . number_format($totalIncome, 2); ?></h3>
+                <h3 class="card-text" id="totalIncomeValue"><?php echo '€' . number_format($totalIncome, 2); ?></h3>
             </div>
         </div>
     </div>
@@ -12,15 +12,15 @@
         <div class="card border-danger">
             <div class="card-body text-center">
                 <h5 class="card-title text-danger">Dépenses Totales</h5>
-                <h3 class="card-text"><?php echo '€' . number_format($totalExpense, 2); ?></h3>
+                <h3 class="card-text" id="totalExpenseValue"><?php echo '€' . number_format($totalExpense, 2); ?></h3>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card <?php echo $netBalance >= 0 ? 'border-success' : 'border-warning'; ?>">
+        <div class="card <?php echo $netBalance >= 0 ? 'border-success' : 'border-warning'; ?>" id="netBalanceCard">
             <div class="card-body text-center">
-                <h5 class="card-title <?php echo $netBalance >= 0 ? 'text-success' : 'text-warning'; ?>">Solde Net</h5>
-                <h3 class="card-text"><?php echo '€' . number_format($netBalance, 2); ?></h3>
+                <h5 class="card-title <?php echo $netBalance >= 0 ? 'text-success' : 'text-warning'; ?>" id="netBalanceLabel">Solde Net</h5>
+                <h3 class="card-text" id="netBalanceValue"><?php echo '€' . number_format($netBalance, 2); ?></h3>
             </div>
         </div>
     </div>
@@ -73,7 +73,8 @@
                                 <label for="income_description" class="form-label">Description</label>
                                 <textarea class="form-control" id="income_description" name="description" rows="3"></textarea>
                             </div>
-                            <button type="submit" name="add_income" class="btn btn-primary w-100">Ajouter Revenu</button>
+                            <input type="hidden" name="action" value="add_income">
+                            <button type="submit" class="btn btn-primary w-100">Ajouter Revenu</button>
                         </form>
                     </div>
                 </div>
@@ -118,7 +119,8 @@
                                 <label for="expense_description" class="form-label">Description</label>
                                 <textarea class="form-control" id="expense_description" name="description" rows="3"></textarea>
                             </div>
-                            <button type="submit" name="add_expense" class="btn btn-danger w-100">Ajouter Dépense</button>
+                            <input type="hidden" name="action" value="add_expense">
+                            <button type="submit" class="btn btn-danger w-100">Ajouter Dépense</button>
                         </form>
                     </div>
                 </div>

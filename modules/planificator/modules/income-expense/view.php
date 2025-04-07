@@ -16,6 +16,10 @@ $ajaxHandlerUrl = '/modules/planificator/modules/income-expense/ajax-handler.php
 <!-- Include the shared CSS for animations and styling -->
 <link rel="stylesheet" href="/modules/planificator/modules/modules.css">
 
+<!-- Hidden fields for date range to be used by DataTables -->
+<input type="hidden" id="periodStartDate" value="<?php echo $startDate; ?>">
+<input type="hidden" id="periodEndDate" value="<?php echo $endDate; ?>">
+
 <?php if (isset($flashMessage) && isset($flashType)): ?>
     <div class="alert alert-<?php echo $flashType; ?> alert-dismissible fade show" role="alert">
         <?php echo $flashMessage; ?>
@@ -47,9 +51,6 @@ $ajaxHandlerUrl = '/modules/planificator/modules/income-expense/ajax-handler.php
       <div class="modal-body">
         <div id="edit-income-form-container"></div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-      </div>
     </div>
   </div>
 </div>
@@ -64,9 +65,6 @@ $ajaxHandlerUrl = '/modules/planificator/modules/income-expense/ajax-handler.php
       </div>
       <div class="modal-body">
         <div id="edit-expense-form-container"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
       </div>
     </div>
   </div>
@@ -86,19 +84,23 @@ $(document).ready(function() {
     const incomeModal = new bootstrap.Modal(document.getElementById('editIncomeModal'));
     const expenseModal = new bootstrap.Modal(document.getElementById('editExpenseModal'));
     
+    // Period dates for AJAX requests
+    const startDate = $('#periodStartDate').val();
+    const endDate = $('#periodEndDate').val();
+    
     // Function to build a complete form from scratch
     function buildTransactionForm(type, data, categories) {
         const formId = `edit-${type}-form`;
-        const submitName = `update_${type}`;
+        const action = `update_${type}`;
         const buttonText = type === 'income' ? 'Revenu' : 'Dépense';
         const buttonClass = type === 'income' ? 'primary' : 'danger';
         
         // Create a complete form with all elements
         let formHtml = `
-            <form id="${formId}" method="POST">
+            <form id="${formId}">
                 <div class="mb-3">
                     <label for="edit_${type}_category" class="form-label">Catégorie</label>
-                    <select name="category_id" id="edit_${type}_category" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px;" required>
+                    <select name="category_id" id="edit_${type}_category" class="form-select" required>
                         <option value="">Sélectionner Catégorie</option>`;
                         
         // Add all options and mark the selected one
@@ -124,7 +126,10 @@ $(document).ready(function() {
                     <textarea class="form-control" id="edit_${type}_description" name="description" rows="3">${data.description || ''}</textarea>
                 </div>
                 <input type="hidden" name="transaction_id" value="${data.id}">
-                <button type="submit" name="${submitName}" class="btn btn-${buttonClass} w-100">Mettre à jour ${buttonText}</button>
+                <input type="hidden" name="action" value="${action}">
+                <input type="hidden" name="start_date" value="${startDate}">
+                <input type="hidden" name="end_date" value="${endDate}">
+                <button type="submit" class="btn btn-${buttonClass} w-100">Mettre à jour ${buttonText}</button>
             </form>
         `;
         
@@ -153,7 +158,108 @@ $(document).ready(function() {
         }, 50);
     });
 
-    // Critical fix: Use document delegation with the most specific selector possible
+    // Helper function to update summary data
+    function updateSummary(summary) {
+        if (summary) {
+            $('#totalIncomeValue').text('€' + parseFloat(summary.totalIncome).toFixed(2));
+            $('#totalExpenseValue').text('€' + parseFloat(summary.totalExpense).toFixed(2));
+            $('#netBalanceValue').text('€' + parseFloat(summary.netBalance).toFixed(2));
+            
+            // Update net balance color
+            const netBalanceCard = $('#netBalanceCard');
+            if (summary.netBalance >= 0) {
+                netBalanceCard.removeClass('border-warning').addClass('border-success');
+                $('#netBalanceLabel').removeClass('text-warning').addClass('text-success');
+            } else {
+                netBalanceCard.removeClass('border-success').addClass('border-warning');
+                $('#netBalanceLabel').removeClass('text-success').addClass('text-warning');
+            }
+        }
+    }
+
+    // Add Income Form Submission via AJAX
+    $('#income-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        formData.append('start_date', startDate);
+        formData.append('end_date', endDate);
+        
+        $.ajax({
+            url: ajaxHandlerUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // Show success message
+                    popup_alert(response.message, "green filledlight", "#009900", "uk-icon-check");
+                    
+                    // Reset form
+                    $('#income-form')[0].reset();
+                    
+                    // Reload table data
+                    if (window.incomeTransactionsTable) {
+                        window.incomeTransactionsTable.ajax.reload();
+                    }
+                    
+                    // Update summary
+                    updateSummary(response.summary);
+                } else {
+                    // Show error message
+                    popup_alert(response.error, "red filledlight", "#990000", "uk-icon-warning");
+                }
+            },
+            error: function() {
+                popup_alert('Erreur de communication avec le serveur', "red filledlight", "#990000", "uk-icon-warning");
+            }
+        });
+    });
+    
+    // Add Expense Form Submission via AJAX
+    $('#expense-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        formData.append('start_date', startDate);
+        formData.append('end_date', endDate);
+        
+        $.ajax({
+            url: ajaxHandlerUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // Show success message
+                    popup_alert(response.message, "green filledlight", "#009900", "uk-icon-check");
+                    
+                    // Reset form
+                    $('#expense-form')[0].reset();
+                    
+                    // Reload table data
+                    if (window.expenseTransactionsTable) {
+                        window.expenseTransactionsTable.ajax.reload();
+                    }
+                    
+                    // Update summary
+                    updateSummary(response.summary);
+                } else {
+                    // Show error message
+                    popup_alert(response.error, "red filledlight", "#990000", "uk-icon-warning");
+                }
+            },
+            error: function() {
+                popup_alert('Erreur de communication avec le serveur', "red filledlight", "#990000", "uk-icon-warning");
+            }
+        });
+    });
+
+    // Handle edit transaction click
     $(document).on('click', 'table .edit-transaction', function(e) {
         e.preventDefault();
         
@@ -184,17 +290,59 @@ $(document).ready(function() {
                     const formHtml = buildTransactionForm(type, data, categories);
                     $(`#${formContainerId}`).html(formHtml);
                     modal.show();
+                    
+                    // Set up the edit form submission
+                    const formId = `#edit-${type}-form`;
+                    $(document).on('submit', formId, function(e) {
+                        e.preventDefault();
+                        
+                        const formData = new FormData(this);
+                        
+                        $.ajax({
+                            url: ajaxHandlerUrl,
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    // Close modal
+                                    modal.hide();
+                                    
+                                    // Show success message
+                                    popup_alert(response.message, "green filledlight", "#009900", "uk-icon-check");
+                                    
+                                    // Reload table data
+                                    if (isIncome && window.incomeTransactionsTable) {
+                                        window.incomeTransactionsTable.ajax.reload();
+                                    } else if (!isIncome && window.expenseTransactionsTable) {
+                                        window.expenseTransactionsTable.ajax.reload();
+                                    }
+                                    
+                                    // Update summary
+                                    updateSummary(response.summary);
+                                } else {
+                                    // Show error message
+                                    popup_alert(response.error, "red filledlight", "#990000", "uk-icon-warning");
+                                }
+                            },
+                            error: function() {
+                                popup_alert('Erreur de communication avec le serveur', "red filledlight", "#990000", "uk-icon-warning");
+                            }
+                        });
+                    });
                 } else {
                     alert(`Erreur: ${data && data.error ? data.error : 'Impossible de récupérer les données'}`);
                 }
             },
-            error: function(xhr, status, error) {
+            error: function() {
                 alert('Erreur lors de la récupération des données. Veuillez réessayer.');
             }
         });
     });
     
-    // Also fix the delete handler to use the same approach
+    // Handle delete transaction click
     $(document).on('click', 'table .delete-transaction', function(e) {
         e.preventDefault();
         
@@ -207,48 +355,61 @@ $(document).ready(function() {
             return;
         }
         
-        // Set confirmation message and form field name based on transaction type
+        // Set confirmation message based on transaction type
         const confirmMessage = isIncome 
             ? 'Êtes-vous sûr de vouloir supprimer ce revenu ?'
             : 'Êtes-vous sûr de vouloir supprimer cette dépense ?';
         
-        const deleteFieldName = isIncome ? 'delete_income' : 'delete_expense';
+        const action = isIncome ? 'delete_income' : 'delete_expense';
         
         if (confirm(confirmMessage)) {
-            const form = $('<form>', {
-                method: 'POST',
-                style: 'display: none;'
+            $.ajax({
+                url: ajaxHandlerUrl,
+                type: 'POST',
+                data: {
+                    action: action,
+                    transaction_id: transactionId,
+                    start_date: startDate,
+                    end_date: endDate
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        // Show success message
+                        popup_alert(response.message, "green filledlight", "#009900", "uk-icon-check");
+                        
+                        // Reload table data
+                        if (isIncome && window.incomeTransactionsTable) {
+                            window.incomeTransactionsTable.ajax.reload();
+                        } else if (!isIncome && window.expenseTransactionsTable) {
+                            window.expenseTransactionsTable.ajax.reload();
+                        }
+                        
+                        // Update summary
+                        updateSummary(response.summary);
+                    } else {
+                        // Show error message
+                        popup_alert(response.error, "red filledlight", "#990000", "uk-icon-warning");
+                    }
+                },
+                error: function() {
+                    popup_alert('Erreur de communication avec le serveur', "red filledlight", "#990000", "uk-icon-warning");
+                }
             });
-            
-            form.append($('<input>', {
-                type: 'hidden',
-                name: 'transaction_id',
-                value: transactionId
-            }));
-            
-            form.append($('<input>', {
-                type: 'hidden',
-                name: deleteFieldName,
-                value: '1'
-            }));
-            
-            form.appendTo('body').submit();
         }
     });
     
     // Clean up modals when closed
     $('#editIncomeModal').on('hidden.bs.modal', function() {
         $('#edit-income-form-container').empty();
+        // Remove event handler to prevent duplicates
+        $(document).off('submit', '#edit-income-form');
     });
     
     $('#editExpenseModal').on('hidden.bs.modal', function() {
         $('#edit-expense-form-container').empty();
+        // Remove event handler to prevent duplicates
+        $(document).off('submit', '#edit-expense-form');
     });
-    
-    // Add a helper function to check if a table contains data
-    window.hasDataTableData = function(tableId) {
-        const $table = $('#' + tableId);
-        return $table.find('tbody tr').not('.no-data-row').length > 0;
-    };
 });
 </script>
