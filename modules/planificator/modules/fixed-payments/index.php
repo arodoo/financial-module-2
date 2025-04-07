@@ -69,6 +69,12 @@ if (!in_array($activeTab, $validTabs))
           <?php
           $type = 'payment';
           $editItem = null; // Not in edit mode
+          
+          // Create and initialize controller with the right type
+          require_once __DIR__ . '/../../controllers/FixedItemController.php';
+          $paymentController = new FixedItemController('payment');
+          $categories = $paymentController->getCategories();
+          
           include __DIR__ . '/item-form.php';
           ?>
         </div>
@@ -94,6 +100,12 @@ if (!in_array($activeTab, $validTabs))
           <?php
           $type = 'expense';
           $editItem = null; // Not in edit mode 
+          
+          // Create and initialize controller with the right type
+          require_once __DIR__ . '/../../controllers/FixedItemController.php';
+          $expenseController = new FixedItemController('expense');
+          $categories = $expenseController->getCategories();
+          
           include __DIR__ . '/item-form.php';
           ?>
         </div>

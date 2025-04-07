@@ -36,6 +36,9 @@ class FixedItemController
             $this->tableName = 'depenses_fixes';
             $this->categoryTable = 'depense_categories';
         }
+        
+        // Set the appropriate category table in the model
+        $this->model->setCategoryTable($this->categoryTable);
 
         // Set current user
         $this->currentUser = ['id' => $id_oo];

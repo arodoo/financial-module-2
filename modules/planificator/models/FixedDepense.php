@@ -118,6 +118,15 @@ class FixedDepense {
     }
     
     /**
+     * Set the category table name
+     * @param string $table_name Category table name
+     * @return void
+     */
+    public function setCategoryTable($table_name) {
+        $this->categories_table = $table_name;
+    }
+    
+    /**
      * Get all expense categories
      * @return array Categories data
      */
