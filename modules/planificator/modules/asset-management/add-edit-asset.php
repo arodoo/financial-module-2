@@ -96,7 +96,7 @@ $membre_id = $id_oo ?? 1; // Default to 1 if not set
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         // Format currency inputs
         const currencyInputs = document.querySelectorAll('.currency-input');
         currencyInputs.forEach(input => {
@@ -107,13 +107,13 @@ $membre_id = $id_oo ?? 1; // Default to 1 if not set
             }
 
             // Format when typing
-            input.addEventListener('input', function (e) {
+            input.addEventListener('input', function(e) {
                 let value = this.value.replace(/\D/g, '');
                 this.value = new Intl.NumberFormat('fr-FR').format(value);
             });
 
             // Clean before form submission
-            input.form.addEventListener('submit', function () {
+            input.form.addEventListener('submit', function() {
                 currencyInputs.forEach(inp => {
                     inp.value = inp.value.replace(/\s/g, '');
                 });
@@ -139,7 +139,7 @@ $membre_id = $id_oo ?? 1; // Default to 1 if not set
         }
 
         // Function to submit the new asset form via AJAX
-        window.submitNewAssetForm = function (event) {
+        window.submitNewAssetForm = function(event) {
             event.preventDefault();
 
             const form = event.target;
@@ -165,9 +165,9 @@ $membre_id = $id_oo ?? 1; // Default to 1 if not set
 
             // Submit via AJAX
             fetch('<?php echo $ajaxHandlerUrl; ?>', {
-                method: 'POST',
-                body: formData
-            })
+                    method: 'POST',
+                    body: formData
+                })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -182,7 +182,26 @@ $membre_id = $id_oo ?? 1; // Default to 1 if not set
                     if (response.success) {
                         // Reset form for new entries
                         if (!isEdit) {
-                            form.reset();
+                            form.querySelectorAll('input:not([type="hidden"])').forEach(input => {
+                                if (input.type === 'text' || input.type === 'number') {
+                                    input.value = '';
+                                } else if (input.type === 'date') {
+                                    input.value = input.name === 'valuation_date' ? new Date().toISOString().split('T')[0] : '';
+                                }
+                            });
+
+                            // Clear any textareas
+                            form.querySelectorAll('textarea').forEach(textarea => {
+                                textarea.value = '';
+                            });
+
+                            // Reset currency inputs
+                            form.querySelectorAll('.currency-input').forEach(input => {
+                                input.value = '';
+                            });
+
+                            // Reset validation UI if present
+                            form.classList.remove('was-validated');
                         }
 
                         // Show success message

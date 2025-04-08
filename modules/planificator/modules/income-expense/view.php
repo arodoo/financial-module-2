@@ -196,9 +196,26 @@ $(document).ready(function() {
                 if (response.success) {
                     // Show success message
                     popup_alert(response.message, "green filledlight", "#009900", "uk-icon-check");
-                    
-                    // Reset form
-                    $('#income-form')[0].reset();
+                      // Reset form but keep dropdown selections
+                    const incomeForm = $('#income-form')[0];
+                    // Clear text inputs except hidden fields
+                    $(incomeForm).find('input:not([type="hidden"])').each(function() {
+                        if (this.type === 'text' || this.type === 'number') {
+                            this.value = '';
+                        } else if (this.type === 'date') {
+                            this.value = this.name === 'transaction_date' ? new Date().toISOString().split('T')[0] : '';
+                        }
+                    });
+
+                    // Clear any textareas
+                    $(incomeForm).find('textarea').each(function() {
+                        this.value = '';
+                    });
+
+                    // Remove validation styling if present
+                    $(incomeForm).removeClass('was-validated');
+
+                    console.log('Income form inputs cleared, dropdown selections preserved');
                     
                     // Reload table data
                     if (window.incomeTransactionsTable) {
@@ -237,9 +254,26 @@ $(document).ready(function() {
                 if (response.success) {
                     // Show success message
                     popup_alert(response.message, "green filledlight", "#009900", "uk-icon-check");
-                    
-                    // Reset form
-                    $('#expense-form')[0].reset();
+                      // Reset form but keep dropdown selections
+                    const expenseForm = $('#expense-form')[0];
+                    // Clear text inputs except hidden fields
+                    $(expenseForm).find('input:not([type="hidden"])').each(function() {
+                        if (this.type === 'text' || this.type === 'number') {
+                            this.value = '';
+                        } else if (this.type === 'date') {
+                            this.value = this.name === 'transaction_date' ? new Date().toISOString().split('T')[0] : '';
+                        }
+                    });
+
+                    // Clear any textareas
+                    $(expenseForm).find('textarea').each(function() {
+                        this.value = '';
+                    });
+
+                    // Remove validation styling if present
+                    $(expenseForm).removeClass('was-validated');
+
+                    console.log('Expense form inputs cleared, dropdown selections preserved');
                     
                     // Reload table data
                     if (window.expenseTransactionsTable) {
