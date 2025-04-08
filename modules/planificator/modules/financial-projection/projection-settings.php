@@ -100,10 +100,145 @@
 </div>
 
 <script>
+// Add CSS for visual feedback
+const style = document.createElement('style');
+style.textContent = `
+    #initial_balance.loading {
+        background-color: #f8f9fa;
+        transition: background-color 0.3s;
+    }
+    
+    #initial_balance.updating {
+        background-color: #e2f0ff;
+        transition: background-color 0.6s, color 0.3s;
+    }
+    
+    @keyframes highlight {
+        0% { background-color: #ffffff; }
+        50% { background-color: #e2f0ff; }
+        100% { background-color: #ffffff; }
+    }
+    
+    .form-text.updated {
+        animation: highlight 1s ease;
+    }
+`;
+document.head.appendChild(style);
+
 /**
  * Initialize settings form
  */
 function initSettings() {
-    // Optional: Add any specific settings initialization logic here
+    // Add event listener to the include assets checkbox
+    document.getElementById('include_assets').addEventListener('change', function() {
+        updateInitialBalanceField(false); // Manual toggle - show visual feedback
+    });
+    
+    // Store original balance value for toggle functionality
+    fetchBalanceData();
+}
+
+// Global variables to store values
+let originalBalance = 0;
+let totalAssetsValue = 0;
+
+/**
+ * Fetch balance data from server
+ */
+function fetchBalanceData() {
+    const timestamp = new Date().getTime();
+    const ajaxUrl = `/Planificator/modules/financial-projection/ajax-handler.php?_=${timestamp}`;
+    
+    // Show loading indicator
+    const balanceField = document.getElementById('initial_balance');
+    const originalValue = balanceField.value;
+    balanceField.classList.add('loading');
+    
+    // Prepare form data
+    const formData = new FormData();
+    formData.append('action', 'get_balance_data');
+    
+    // Send AJAX request
+    fetch(ajaxUrl, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            console.log('Balance data received:', data.data);
+            // Store values for later use - ensure they're valid numbers
+            originalBalance = parseFloat(data.data.current_balance) || 0;
+            totalAssetsValue = parseFloat(data.data.total_assets) || 0;
+            
+            console.log('Parsed values - Balance:', originalBalance, 'Assets:', totalAssetsValue);
+            
+            // Initialize the field with current values
+            updateInitialBalanceField(true);
+        } else {
+            console.error('Error in AJAX response:', data);
+            balanceField.value = originalValue;
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching balance data:', error);
+        balanceField.value = originalValue;
+    })
+    .finally(() => {
+        // Remove loading indicator
+        balanceField.classList.remove('loading');
+    });
+}
+
+/**
+ * Update the initial balance field based on checkbox state
+ * @param {boolean} isInitial - Whether this is the initial update
+ */
+function updateInitialBalanceField(isInitial = false) {
+    const includeAssets = document.getElementById('include_assets').checked;
+    const balanceField = document.getElementById('initial_balance');
+    
+    // Find the specific form-text element for this field
+    const balanceSource = balanceField.closest('.mb-3').querySelector('.form-text');
+    
+    if (!isInitial) {
+        // Add transition effect when manually toggled
+        balanceField.classList.add('updating');
+        setTimeout(() => balanceField.classList.remove('updating'), 600);
+        
+        // Add highlight effect to the explanation text
+        balanceSource.classList.add('updated');
+        setTimeout(() => balanceSource.classList.remove('updated'), 1000);
+    }
+    
+    console.log('Updating balance - Include assets:', includeAssets);
+    console.log('Current values - Original balance:', originalBalance, 'Assets value:', totalAssetsValue);
+    
+    // Calculate new balance based on checkbox state
+    const newBalance = includeAssets ? 
+        originalBalance + totalAssetsValue : 
+        originalBalance;
+    
+    console.log('New balance calculated:', newBalance);
+    
+    // Update the field - ensure it's a valid number
+    balanceField.value = isNaN(newBalance) ? 0 : newBalance.toFixed(0);
+    
+    // Update the description text
+    if (includeAssets) {
+        balanceSource.innerHTML = `Solde (${originalBalance.toFixed(0)}€) + Actifs (${totalAssetsValue.toFixed(0)}€)`;
+    } else {
+        balanceSource.innerHTML = 'Solde des ressources et dépenses à la date de début.';
+    }
 }
 </script>

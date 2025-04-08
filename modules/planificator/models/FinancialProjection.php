@@ -95,8 +95,7 @@ class FinancialProjection {
             return [];
         }
     }
-    
-    /**
+      /**
      * Get current assets total value
      * @return float Total assets value
      */
@@ -105,7 +104,7 @@ class FinancialProjection {
         
         try {
             $sql = "SELECT 
-                        SUM(current_value) as total_value 
+                        COALESCE(SUM(current_value), 0) as total_value 
                     FROM 
                         assets 
                     WHERE 
@@ -116,8 +115,10 @@ class FinancialProjection {
             $stmt->execute();
             
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            error_log("getTotalAssets result: " . print_r($result, true));
             return floatval($result['total_value'] ?? 0);
         } catch (Exception $e) {
+            error_log("Error in getTotalAssets: " . $e->getMessage());
             return 0;
         }
     }
@@ -373,7 +374,7 @@ class FinancialProjection {
         }
         
         try {
-            // Get total income until start date
+            // Get total income until start date (all historical transactions)
             $sql = "SELECT COALESCE(SUM(amount), 0) as total FROM income_transactions 
                     WHERE membre_id = :membre_id AND transaction_date <= :start_date";
             $stmt = $this->conn->prepare($sql);
@@ -383,7 +384,18 @@ class FinancialProjection {
             $incomeResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $totalIncome = floatval($incomeResult['total'] ?? 0);
             
-            // Get total expenses until start date
+            // For detailed debugging
+            $sql = "SELECT id, amount, transaction_date FROM income_transactions 
+                    WHERE membre_id = :membre_id AND transaction_date <= :start_date
+                    ORDER BY transaction_date DESC";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(':membre_id', $this->membre_id, PDO::PARAM_INT);
+            $stmt->bindValue(':start_date', $startDate, PDO::PARAM_STR);
+            $stmt->execute();
+            $incomeDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            error_log("Financial Projection - Income Transactions: " . json_encode($incomeDetails));
+            
+            // Get total expenses until start date (all historical transactions) 
             $sql = "SELECT COALESCE(SUM(amount), 0) as total FROM expense_transactions 
                     WHERE membre_id = :membre_id AND transaction_date <= :start_date";
             $stmt = $this->conn->prepare($sql);
@@ -392,6 +404,24 @@ class FinancialProjection {
             $stmt->execute();
             $expenseResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $totalExpenses = floatval($expenseResult['total'] ?? 0);
+            
+            // For detailed debugging
+            $sql = "SELECT id, amount, transaction_date FROM expense_transactions 
+                    WHERE membre_id = :membre_id AND transaction_date <= :start_date
+                    ORDER BY transaction_date DESC";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(':membre_id', $this->membre_id, PDO::PARAM_INT);
+            $stmt->bindValue(':start_date', $startDate, PDO::PARAM_STR);
+            $stmt->execute();
+            $expenseDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            error_log("Financial Projection - Expense Transactions: " . json_encode($expenseDetails));
+            
+            // For debugging
+            error_log("Financial Projection - membre_id: " . $this->membre_id);
+            error_log("Financial Projection - startDate: " . $startDate);
+            error_log("Financial Projection - Income Total: " . $totalIncome);
+            error_log("Financial Projection - Expense Total: " . $totalExpenses);
+            error_log("Financial Projection - Balance: " . ($totalIncome - $totalExpenses));
             
             // Calculate balance
             $balance = $totalIncome - $totalExpenses;
