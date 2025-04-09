@@ -261,13 +261,25 @@ $filename = $tableTitle . '-' . date('d-m-Y', time());
                         return json.items || [];
                     }
                 },
+                "order": [[0, 'desc']], // Sort by start date (descending order - newest first)
                 "columns": [
                     { 
                         "data": null,
                         "render": function(data, type, row) {
-                            // Format the date using toLocaleDateString for consistent formatting
-                            let startDate = row.start_date ? 
-                                new Date(row.start_date).toLocaleDateString('fr-FR') : 'N/A';
+                            // For sorting, return the raw date
+                            if (type === 'sort' || type === 'type') {
+                                return row.start_date || ''; // YYYY-MM-DD format is naturally sortable
+                            }
+                            
+                            // For display, format the date using string operations
+                            let startDate = 'N/A';
+                            if (row.start_date) {
+                                const parts = row.start_date.split('-');
+                                if (parts.length === 3) {
+                                    // Format as DD/MM/YYYY (French format)
+                                    startDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                                }
+                            }
                             return `${row.name}<small class="d-block text-muted">Début: ${startDate}</small>`;
                         }
                     },
@@ -333,7 +345,6 @@ $filename = $tableTitle . '-' . date('d-m-Y', time());
                         }
                     }
                 ],
-                "order": [],
                 responsive: false,
                 stateSave: false,
                 dom: 'Bftipr',

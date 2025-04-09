@@ -36,10 +36,9 @@ $nom_fichier_datatable = $tableTitle . "-" . date('d-m-Y', time());
 </div>
 
 <script>
-$(document).ready(function() {
-    // Initialize DataTables
+$(document).ready(function() {    // Initialize DataTables
     var dataTable = $('#<?php echo $tableId; ?>').DataTable({
-        "order": [],
+        "order": [[0, 'desc']], // Sort by first column (acquisition date) in descending order
         responsive: false,
         stateSave: false, 
         dom: 'Bftipr',
@@ -57,14 +56,23 @@ $(document).ready(function() {
                 return json.data || [];
             }
         },
-        "columns": [
-            { 
+        "columns": [            { 
                 "data": null,
                 "render": function(data, type, row) {
-                    // Format the acquisition date
-                    // Fix: Check for purchase_date (database field) instead of acquisition_date
-                    let acquisitionDate = row.purchase_date ? 
-                        new Date(row.purchase_date).toLocaleDateString('fr-FR') : 'N/A';
+                    // For sorting or filtering, return the date in sortable format
+                    if (type === 'sort' || type === 'type') {
+                        return row.purchase_date || ''; // YYYY-MM-DD format is naturally sortable
+                    }
+                    
+                    // For display, format the date
+                    let acquisitionDate = 'N/A';
+                    if (row.purchase_date) {
+                        const parts = row.purchase_date.split('-');
+                        if (parts.length === 3) {
+                            // Format as DD/MM/YYYY (French format)
+                            acquisitionDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                        }
+                    }
                     return `${row.name}<small class="d-block text-muted">Acquis: ${acquisitionDate}</small>`;
                 }
             },

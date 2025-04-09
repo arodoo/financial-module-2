@@ -102,12 +102,21 @@ $(document).ready(function() {
             "columns": [
                 { 
                     "data": "transaction_date",
-                    "render": function(data) {
-                        return new Date(data).toLocaleDateString('fr-FR', {
-                            day: '2-digit',
-                            month: 'short',
-                            year: 'numeric'
-                        });
+                    "render": function(data, type, row) {
+                        // For sorting or filtering, return the raw date
+                        if (type === 'sort' || type === 'type') {
+                            return data || ''; // YYYY-MM-DD format is naturally sortable
+                        }
+                        
+                        // For display, format the date using string operations
+                        if (data) {
+                            const parts = data.split('-');
+                            if (parts.length === 3) {
+                                // Format as DD/MM/YYYY
+                                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                            }
+                        }
+                        return 'N/A';
                     }
                 },
                 { "data": "category_name" },
@@ -141,7 +150,7 @@ $(document).ready(function() {
                     }
                 }
             ],
-            "order": [],
+            "order": [[0, 'desc']], // Sort by transaction date in descending order (newest first)
             "responsive": false,
             "stateSave": false, 
             "dom": 'Bftipr',
