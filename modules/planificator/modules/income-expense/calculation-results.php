@@ -42,92 +42,34 @@
 
 <div class="tab-content" id="financeTabContent">
     <!-- Income Tab -->
-    <div class="tab-pane fade show active" id="income" role="tabpanel">
-        <div class="row">
-            <!-- Income Form -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Ajouter Nouveau Revenu</h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="income-form" method="POST">
-                            <div class="mb-3">
-                                <label for="income_category" class="form-label">Catégorie</label>
-                                <select class="form-select" id="income_category" name="category_id" required>
-                                    <option value="">Sélectionner Catégorie</option>
-                                    <?php foreach ($incomeCategories as $category): ?>
-                                        <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="income_amount" class="form-label">Montant (€)</label>
-                                <input type="number" class="form-control" id="income_amount" name="amount" step="0.01" min="0" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="income_date" class="form-label">Date</label>
-                                <input type="date" class="form-control" id="income_date" name="transaction_date" value="<?php echo date('Y-m-d'); ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="income_description" class="form-label">Description</label>
-                                <textarea class="form-control" id="income_description" name="description" rows="3"></textarea>
-                            </div>
-                            <input type="hidden" name="action" value="add_income">
-                            <button type="submit" class="btn btn-primary w-100">Ajouter Revenu</button>
-                        </form>
-                    </div>
-                </div>
+    <div class="tab-pane fade show active" id="income" role="tabpanel" aria-labelledby="income-tab">
+        <div class="row mb-3">
+            <div class="col-12 text-end">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addIncomeModal">
+                    <i class="fas fa-plus"></i> Ajouter un Revenu
+                </button>
             </div>
-            
-            <!-- Income Transactions List -->
-            <div class="col-md-8">
+        </div>
+        <div class="row">
+            <!-- Income Transactions List (Full Width) -->
+            <div class="col-md-12">
                 <?php $transactionType = 'income'; include 'render-transactions.php'; ?>
             </div>
         </div>
     </div>
     
     <!-- Expense Tab -->
-    <div class="tab-pane fade" id="expense" role="tabpanel">
-        <div class="row">
-            <!-- Expense Form -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-danger text-white">
-                        <h5 class="mb-0">Ajouter Nouvelle Dépense</h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="expense-form" method="POST">
-                            <div class="mb-3">
-                                <label for="expense_category" class="form-label">Catégorie</label>
-                                <select class="form-select" id="expense_category" name="category_id" required>
-                                    <option value="">Sélectionner Catégorie</option>
-                                    <?php foreach ($expenseCategories as $category): ?>
-                                        <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="expense_amount" class="form-label">Montant (€)</label>
-                                <input type="number" class="form-control" id="expense_amount" name="amount" step="0.01" min="0" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="expense_date" class="form-label">Date</label>
-                                <input type="date" class="form-control" id="expense_date" name="transaction_date" value="<?php echo date('Y-m-d'); ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="expense_description" class="form-label">Description</label>
-                                <textarea class="form-control" id="expense_description" name="description" rows="3"></textarea>
-                            </div>
-                            <input type="hidden" name="action" value="add_expense">
-                            <button type="submit" class="btn btn-danger w-100">Ajouter Dépense</button>
-                        </form>
-                    </div>
-                </div>
+    <div class="tab-pane fade" id="expense" role="tabpanel" aria-labelledby="expense-tab">
+        <div class="row mb-3">
+            <div class="col-12 text-end">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
+                    <i class="fas fa-plus"></i> Ajouter une Dépense
+                </button>
             </div>
-            
-            <!-- Expense Transactions List -->
-            <div class="col-md-8">
+        </div>
+        <div class="row">
+            <!-- Expense Transactions List (Full Width) -->
+            <div class="col-md-12">
                 <?php $transactionType = 'expense'; include 'render-transactions.php'; ?>
             </div>
         </div>

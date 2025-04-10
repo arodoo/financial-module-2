@@ -40,6 +40,84 @@ $ajaxHandlerUrl = '/modules/planificator/modules/income-expense/ajax-handler.php
 
 <?php include 'calculation-results.php'; ?>
 
+<!-- Income Add Modal -->
+<div class="modal fade" id="addIncomeModal" tabindex="-1" aria-labelledby="addIncomeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="addIncomeModalLabel">Ajouter Nouveau Revenu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="income-form" method="POST">
+            <div class="mb-3">
+                <label for="income_category" class="form-label">Catégorie</label>
+                <select class="form-select" id="income_category" name="category_id" required>
+                    <option value="">Sélectionner Catégorie</option>
+                    <?php foreach ($incomeCategories as $category): ?>
+                        <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="income_amount" class="form-label">Montant (€)</label>
+                <input type="number" class="form-control" id="income_amount" name="amount" step="0.01" min="0" required>
+            </div>
+            <div class="mb-3">
+                <label for="income_date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="income_date" name="transaction_date" value="<?php echo date('Y-m-d'); ?>" required>
+            </div>
+            <div class="mb-3">
+                <label for="income_description" class="form-label">Description</label>
+                <textarea class="form-control" id="income_description" name="description" rows="3"></textarea>
+            </div>
+            <input type="hidden" name="action" value="add_income">
+            <button type="submit" class="btn btn-primary w-100">Ajouter Revenu</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Expense Add Modal -->
+<div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="addExpenseModalLabel">Ajouter Nouvelle Dépense</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="expense-form" method="POST">
+            <div class="mb-3">
+                <label for="expense_category" class="form-label">Catégorie</label>
+                <select class="form-select" id="expense_category" name="category_id" required>
+                    <option value="">Sélectionner Catégorie</option>
+                    <?php foreach ($expenseCategories as $category): ?>
+                        <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="expense_amount" class="form-label">Montant (€)</label>
+                <input type="number" class="form-control" id="expense_amount" name="amount" step="0.01" min="0" required>
+            </div>
+            <div class="mb-3">
+                <label for="expense_date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="expense_date" name="transaction_date" value="<?php echo date('Y-m-d'); ?>" required>
+            </div>
+            <div class="mb-3">
+                <label for="expense_description" class="form-label">Description</label>
+                <textarea class="form-control" id="expense_description" name="description" rows="3"></textarea>
+            </div>
+            <input type="hidden" name="action" value="add_expense">
+            <button type="submit" class="btn btn-danger w-100">Ajouter Dépense</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Income Edit Modal -->
 <div class="modal fade" id="editIncomeModal" tabindex="-1" aria-labelledby="editIncomeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -175,9 +253,7 @@ $(document).ready(function() {
                 $('#netBalanceLabel').removeClass('text-success').addClass('text-warning');
             }
         }
-    }
-
-    // Add Income Form Submission via AJAX
+    }    // Add Income Form Submission via AJAX
     $('#income-form').on('submit', function(e) {
         e.preventDefault();
         
@@ -196,7 +272,15 @@ $(document).ready(function() {
                 if (response.success) {
                     // Show success message
                     popup_alert(response.message, "green filledlight", "#009900", "uk-icon-check");
-                      // Reset form but keep dropdown selections
+                    
+                    // Close the modal
+                    const modal = document.getElementById('addIncomeModal');
+                    if (modal) {
+                        const modalInstance = bootstrap.Modal.getInstance(modal);
+                        if (modalInstance) modalInstance.hide();
+                    }
+                    
+                    // Reset form but keep dropdown selections
                     const incomeForm = $('#income-form')[0];
                     // Clear text inputs except hidden fields
                     $(incomeForm).find('input:not([type="hidden"])').each(function() {
@@ -250,11 +334,18 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             dataType: 'json',
-            success: function(response) {
-                if (response.success) {
+            success: function(response) {                if (response.success) {
                     // Show success message
                     popup_alert(response.message, "green filledlight", "#009900", "uk-icon-check");
-                      // Reset form but keep dropdown selections
+                    
+                    // Close the modal
+                    const modal = document.getElementById('addExpenseModal');
+                    if (modal) {
+                        const modalInstance = bootstrap.Modal.getInstance(modal);
+                        if (modalInstance) modalInstance.hide();
+                    }
+                    
+                    // Reset form but keep dropdown selections
                     const expenseForm = $('#expense-form')[0];
                     // Clear text inputs except hidden fields
                     $(expenseForm).find('input:not([type="hidden"])').each(function() {

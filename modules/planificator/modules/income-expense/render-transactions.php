@@ -42,17 +42,34 @@ $ajaxAction = $transactionType === 'income' ? 'get_income_list' : 'get_expense_l
                 </tfoot>
                 <tbody>
                     <!-- Data will be loaded via AJAX -->
-                </tbody>
-            </table>
+                </tbody>            </table>
         </div>
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
+<style>
+    /* Force DataTables to use full width and respect container */
+    table.dataTable {
+        width: 100% !important;
+    }
+    
+    /* Fix for table cells having fixed widths */
+    .dataTable th, .dataTable td {
+        width: auto !important;
+    }
+</style>
+
+<script>    $(document).ready(function () {
         // First, store our tableId
         var tableId = '<?php echo $tableId; ?>';
         var $table = $('#' + tableId);
+        
+        // Check if this table is already initialized - prevent duplicate initialization
+        if ($.fn.DataTable.isDataTable('#' + tableId)) {
+            console.log('Table ' + tableId + ' already initialized, skipping initialization');
+            return;
+        }
+        
         var transactionType = '<?php echo $transactionType; ?>';
         var ajaxHandlerUrl = '<?php echo $ajaxHandlerUrl; ?>';
         var startDate = $('#periodStartDate').val() || '<?php echo date('Y-m-01'); ?>';
@@ -200,12 +217,25 @@ $ajaxAction = $transactionType === 'income' ? 'get_income_list' : 'get_expense_l
                     }
                 ],
                 "language": languageSettings
-            });
-
-            // Store the DataTable instance in a global variable for later access
+            });            // Store the DataTable instance in a global variable for later access
             window[tableId] = dataTable;
             $table.data('hasData', true);
             $table.data('dataTablesInitialized', true);
+
+            // Fix for tables in hidden tabs - apply specific handling for expense tab
+            if (tableId === 'expenseTransactionsTable') {
+                // When the expense tab is shown, force columns to adjust
+                $(document).on('shown.bs.tab', 'button[data-bs-target="#expense"]', function() {
+                    setTimeout(function() {
+                        if (window.expenseTransactionsTable) {
+                            // Remove any inline width from the table
+                            $('#expenseTransactionsTable').css('width', '100%');
+                            // Force DataTable to recalculate all column widths
+                            window.expenseTransactionsTable.columns.adjust();
+                        }
+                    }, 10);
+                });
+            }
 
             // Add search inputs
             $table.find('tfoot .search_table').each(function () {

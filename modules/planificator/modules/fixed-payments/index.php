@@ -59,30 +59,20 @@ if (!in_array($activeTab, $validTabs))
   <!-- Income tab content -->
   <div class="tab-pane fade <?php echo $activeTab === 'incomes' ? 'show active' : ''; ?>" id="incomes" role="tabpanel"
     aria-labelledby="incomes-tab">
-    <div class="row">
-      <!-- Left Column: Form for adding/editing payments -->
-      <div class="col-md-5">
-        <div class="card mb-4">
-          <div class="card-header bg-success text-white">
-            <h5 class="mb-0">Ajouter un Revenu Fixe</h5>
-          </div>
-          <?php
-          $type = 'payment';
-          $editItem = null; // Not in edit mode
-          
-          // Create and initialize controller with the right type
-          require_once __DIR__ . '/../../controllers/FixedItemController.php';
-          $paymentController = new FixedItemController('payment');
-          $categories = $paymentController->getCategories();
-
-          include __DIR__ . '/item-form.php';
-          ?>
-        </div>
+    <div class="row mb-3">
+      <div class="col-12 text-end">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addIncomeModal">
+          <i class="fas fa-plus"></i> Ajouter un Revenu Fixe
+        </button>
       </div>
-
-      <!-- Right Column: Display payments list -->
-      <div class="col-md-7">
-        <?php include __DIR__ . '/item-list.php'; ?>
+    </div>
+    <div class="row">
+      <!-- Full width for the list -->
+      <div class="col-md-12">
+        <?php 
+        $type = 'payment';
+        include __DIR__ . '/item-list.php'; 
+        ?>
       </div>
     </div>
   </div>
@@ -90,30 +80,74 @@ if (!in_array($activeTab, $validTabs))
   <!-- Expense tab content -->
   <div class="tab-pane fade <?php echo $activeTab === 'expenses' ? 'show active' : ''; ?>" id="expenses" role="tabpanel"
     aria-labelledby="expenses-tab">
+    <div class="row mb-3">
+      <div class="col-12 text-end">
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
+          <i class="fas fa-plus"></i> Ajouter une Dépense Fixe
+        </button>
+      </div>
+    </div>
     <div class="row">
-      <!-- Left Column: Form for adding/editing expenses -->
-      <div class="col-md-5">
-        <div class="card mb-4">
-          <div class="card-header bg-danger text-white">
-            <h5 class="mb-0">Ajouter une Dépense Fixe</h5>
-          </div>
-          <?php
-          $type = 'expense';
-          $editItem = null; // Not in edit mode 
-          
-          // Create and initialize controller with the right type
+      <!-- Full width for the list -->
+      <div class="col-md-12">
+        <?php 
+        $type = 'expense';
+        include __DIR__ . '/item-list.php'; 
+        ?>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for adding income -->
+<div class="modal fade" id="addIncomeModal" tabindex="-1" aria-labelledby="addIncomeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="addIncomeModalLabel">Ajouter un Revenu Fixe</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <?php
+        $type = 'payment';
+        $editItem = null; // Not in edit mode
+        
+        // Create controller if not already done
+        if (!isset($paymentController)) {
+          require_once __DIR__ . '/../../controllers/FixedItemController.php';
+          $paymentController = new FixedItemController('payment');
+          $categories = $paymentController->getCategories();
+        }
+
+        include __DIR__ . '/item-form.php';
+        ?>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for adding expense -->
+<div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="addExpenseModalLabel">Ajouter une Dépense Fixe</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <?php
+        $type = 'expense';
+        $editItem = null; // Not in edit mode
+        
+        // Create controller if not already done
+        if (!isset($expenseController)) {
           require_once __DIR__ . '/../../controllers/FixedItemController.php';
           $expenseController = new FixedItemController('expense');
           $categories = $expenseController->getCategories();
+        }
 
-          include __DIR__ . '/item-form.php';
-          ?>
-        </div>
-      </div>
-
-      <!-- Right Column: Display expenses list -->
-      <div class="col-md-7">
-        <?php include __DIR__ . '/item-list.php'; ?>
+        include __DIR__ . '/item-form.php';
+        ?>
       </div>
     </div>
   </div>
@@ -162,5 +196,41 @@ if (!in_array($activeTab, $validTabs))
         if (window['fixedExpensesTable']) window['fixedExpensesTable'].columns.adjust();
       });
     });
+
+    // Handle form submission in modals and close modal after successful submission
+    const handleFormSuccess = function(formId, modalId) {
+      const form = document.getElementById(formId);
+      if (!form) return;
+      
+      // Listen for the success message in the DOM
+      form.addEventListener('submit', function() {
+        // Wait a reasonable amount of time for the form to be processed
+        setTimeout(() => {
+          // Look for success message in the DOM
+          const successMessages = document.querySelectorAll('.popupalert');
+          
+          // If we found a success message and it contains text indicating success
+          for (const msgContainer of successMessages) {
+            const msgContent = msgContainer.querySelector('.popupalert-content');
+            if (msgContent && (
+                msgContent.textContent.includes('succès') || 
+                msgContent.textContent.includes('enregistré')
+            )) {
+              // Close the modal
+              const modal = document.getElementById(modalId);
+              if (modal) {
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                if (modalInstance) modalInstance.hide();
+              }
+              return;
+            }
+          }
+        }, 500); // Give enough time for the form submission to complete
+      });
+    };
+    
+    // Apply to both forms
+    handleFormSuccess('item-form-payment', 'addIncomeModal');
+    handleFormSuccess('item-form-expense', 'addExpenseModal');
   });
 </script>

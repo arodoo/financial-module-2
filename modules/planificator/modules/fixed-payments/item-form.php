@@ -228,6 +228,16 @@ $item = $isEditMode ? $editItem : null;
                         if (data.success) {
                             // Show success message
                             popup_alert(data.message || `${itemType === 'payment' ? 'Revenu' : 'Dépense'} enregistré(e) avec succès`, "green filledlight", "#009900", "uk-icon-check");
+                            
+                            // Close the modal if this is in a modal
+                            const modalId = itemType === 'payment' ? 'addIncomeModal' : 'addExpenseModal';
+                            const modal = document.getElementById(modalId);
+                            if (modal && typeof bootstrap !== 'undefined') {
+                                const modalInstance = bootstrap.Modal.getInstance(modal);
+                                if (modalInstance) {
+                                    modalInstance.hide();
+                                }
+                            }
 
                             // Reset the form for new entries (but not for edit form)
                             if (!formData.get('item_id')) {
