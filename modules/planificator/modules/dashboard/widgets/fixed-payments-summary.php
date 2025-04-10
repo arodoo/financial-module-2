@@ -43,6 +43,30 @@ $totalMonthlyIncome = array_sum(array_column($activePayments, 'monthly_amount'))
 $totalMonthlyExpenses = array_sum(array_column($activeExpenses, 'monthly_amount'));
 $netMonthly = $totalMonthlyIncome - $totalMonthlyExpenses;
 
+// Helper function to get frequency terms in French
+function getFrequencyInFrench($frequency) {
+    $frequency = strtolower($frequency);
+    
+    switch ($frequency) {
+        case 'monthly':
+            return 'Mensuel';
+        case 'weekly':
+            return 'Hebdomadaire';
+        case 'biweekly':
+        case 'bi-weekly':
+            return 'Bimensuel';
+        case 'quarterly':
+            return 'Trimestriel';
+        case 'biannual':
+        case 'semi-annual':
+            return 'Semestriel';
+        case 'annual':
+            return 'Annuel';
+        default:
+            return $frequency; // If already in French or unknown, return as is
+    }
+}
+
 // Helper function to convert different payment frequencies to monthly equivalents
 function calculateMonthlyEquivalent($amount, $frequency)
 {
@@ -148,7 +172,7 @@ usort($activeExpenses, function ($a, $b) {
                                         <?php foreach (array_slice($activePayments, 0, 4) as $payment): ?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars($payment['name']); ?></td>
-                                                <td><?php echo htmlspecialchars($payment['frequency']); ?></td>
+                                                <td><?php echo htmlspecialchars(getFrequencyInFrench($payment['frequency'])); ?></td>
                                                 <td class="text-end">€<?php echo number_format($payment['amount'], 2); ?></td>
                                                 <td class="text-end">
                                                     €<?php echo number_format($payment['monthly_amount'], 2); ?></td>
@@ -183,7 +207,7 @@ usort($activeExpenses, function ($a, $b) {
                                         <?php foreach (array_slice($activeExpenses, 0, 4) as $expense): ?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars($expense['name']); ?></td>
-                                                <td><?php echo htmlspecialchars($expense['frequency']); ?></td>
+                                                <td><?php echo htmlspecialchars(getFrequencyInFrench($expense['frequency'])); ?></td>
                                                 <td class="text-end">€<?php echo number_format($expense['amount'], 2); ?></td>
                                                 <td class="text-end">
                                                     €<?php echo number_format($expense['monthly_amount'], 2); ?></td>
