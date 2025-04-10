@@ -14,14 +14,25 @@ if (!empty($_SESSION['4M8e7M5b1R2e8s']) || !empty($user)) {
 
     // Define available modules and their titles
     $modules = [
-    'dashboard' => 'Tableau de bord',
-    'income-expense' => 'Revenus & Dépenses',     
-    'fixed-payments' => 'Ressources & Charges Fixes ',
-    'asset-management' => 'Gestion des actifs',
-    'financial-projection' => 'Financière Projection',
-    'loan-simulator' => 'Simulateur de prêt',
-    'school-fee' => 'Frais scolaires'
-];
+        'dashboard' => 'Tableau de bord',
+        'income-expense' => 'Revenus & Dépenses',
+        'fixed-payments' => 'Ressources & Charges Fixes ',
+        'asset-management' => 'Gestion des actifs',
+        'financial-projection' => 'Financière Projection',
+        'loan-simulator' => 'Simulateur de prêt',
+        'school-fee' => 'Frais scolaires',
+    ];
+
+    // Add personalized descriptions for each module
+    $moduleDescriptions = [
+        'dashboard' => 'Vue d\'ensemble de votre situation financière',
+        'income-expense' => 'Gérez et suivez vos revenus et dépenses',
+        'fixed-payments' => 'Configurez vos ressources et charges récurrentes',
+        'asset-management' => 'Suivez la valeur et l\'évolution de vos actifs',
+        'financial-projection' => 'Planifiez votre avenir financier',
+        'loan-simulator' => 'Simulez vos emprunts et calculez vos mensualités',
+        'school-fee' => 'Planifiez les frais de scolarité de vos enfants',
+    ];
 
     $action = isset($_GET['action']) ? $_GET['action'] : 'dashboard';
 
@@ -37,6 +48,11 @@ if (!empty($_SESSION['4M8e7M5b1R2e8s']) || !empty($user)) {
             <a class="navbar-brand" href="#">Planification et gestion financière pour la Famile</a>
         </div>
     </nav>
+    <div class="">
+        <div class="alert text-center" role="alert" style="background-color: #87CEEB; color: white;">
+            <span><?php echo $moduleDescriptions[$action]; ?></span>
+        </div>
+    </div>
 
     <div class="container fixed-container">
         <div class=" content-card">
@@ -64,17 +80,17 @@ if (!empty($_SESSION['4M8e7M5b1R2e8s']) || !empty($user)) {
                         // Include the asset-management module
                         include 'modules/asset-management/index.php';
                         break;
-                    case 'financial-projection': 
+                    case 'financial-projection':
                         // Add this case to match the URL in the menu
                         include 'modules/financial-projection/index.php';
                         break;
                     /* case 'simulation':
-                        // Include the loan simulator module
-                        include 'modules/loan-simulator/index.php';
-                        break;
-                    case 'frais-scolaires':
-                        include 'modules/school-fee-simulator/index.php';
-                        break; */
+            // Include the loan simulator module
+            include 'modules/loan-simulator/index.php';
+            break;
+        case 'frais-scolaires':
+            include 'modules/school-fee-simulator/index.php';
+            break; */
                 }
                 ?>
             </div>
