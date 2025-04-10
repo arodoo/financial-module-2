@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Shared Item Form Template for Payments and Expenses
  *
@@ -7,13 +6,13 @@
  */
 
 // Ensure this file is included, not accessed directly
-if (! defined('MODULE_LOADED')) {
+if (!defined('MODULE_LOADED')) {
     die('Direct access to this file is not allowed.');
 }
 
 // Determine if we are in edit mode
 $isEditMode = isset($editItem) && $editItem;
-$item       = $isEditMode ? $editItem : null;
+$item = $isEditMode ? $editItem : null;
 ?>
 
 <div class="card-body">
@@ -30,8 +29,8 @@ $item       = $isEditMode ? $editItem : null;
         <input type="hidden" name="membre_id" value="<?php echo $id_oo ?? 1; ?>">
 
         <div class="mb-3">
-            <label for="item_name" class="form-label">Nom du
-                <?php echo $type === 'payment' ? 'paiement' : 'dépense'; ?></label>
+            <label for="item_name" class="form-label">Nom
+                <?php echo $type === 'payment' ? 'du paiement' : 'de la dépense'; ?></label>
             <input type="text" class="form-control" id="item_name" name="name"
                 value="<?php echo $isEditMode ? htmlspecialchars($item['name']) : ''; ?>" required>
         </div>
@@ -87,7 +86,7 @@ $item       = $isEditMode ? $editItem : null;
             <div class="col-md-6 mb-3">
                 <label for="end_date" class="form-label">Date de fin (optionnelle)</label>
                 <input type="date" class="form-control" id="end_date" name="end_date"
-                    value="<?php echo $isEditMode && ! empty($item['end_date']) ? $item['end_date'] : ''; ?>">
+                    value="<?php echo $isEditMode && !empty($item['end_date']) ? $item['end_date'] : ''; ?>">
             </div>
         </div>
 
@@ -95,7 +94,8 @@ $item       = $isEditMode ? $editItem : null;
             <label for="status" class="form-label">Statut</label>
             <select id="status" name="status" class="form-select">
                 <?php foreach ($statusOptions as $key => $label): ?>
-                    <option value="<?php echo $key; ?>" <?php echo ((($isEditMode && $item['status'] == $key) ? 'selected' : '') ?: ((! $isEditMode && $key == 'active') ? 'selected' : '')); ?>>
+                    <option value="<?php echo $key; ?>" <?php echo ((($isEditMode && $item['status'] == $key) ? 'selected' : '') ?:
+                           ((!$isEditMode && $key == 'active') ? 'selected' : '')); ?>>
                         <?php echo $label; ?>
                     </option>
                 <?php endforeach; ?>
@@ -118,7 +118,7 @@ $item       = $isEditMode ? $editItem : null;
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Format currency inputs within this specific form only
         document.querySelectorAll('#item-form-<?php echo $type; ?> .currency-input').forEach(inp => {
             // Remove existing event listeners
@@ -126,7 +126,7 @@ $item       = $isEditMode ? $editItem : null;
             inp.removeEventListener('blur', formatCurrency);
 
             // Add input validation to limit to 8 digits before decimal + 2 after (10,2)
-            inp.addEventListener('input', function() {
+            inp.addEventListener('input', function () {
                 // Remove non-numeric characters except decimal separator
                 let value = this.value.replace(/[^\d.,]/g, '');
                 value = value.replace(',', '.');
@@ -184,7 +184,7 @@ $item       = $isEditMode ? $editItem : null;
             // Mark form as initialized to prevent duplicate bindings
             form.setAttribute('data-initialized', 'true');
 
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 // Prevent default form submission
                 e.preventDefault();
                 e.stopPropagation();
@@ -211,14 +211,11 @@ $item       = $isEditMode ? $editItem : null;
                 const formData = new FormData(this);
                 const itemType = formData.get('type');
 
-                // Log what we're submitting - for debugging
-                console.log(`Submitting ${itemType} form via AJAX:`, Object.fromEntries(formData.entries()));
-
                 // Submit via AJAX to the handler
                 fetch('<?php echo $ajaxHandlerUrl; ?>', {
-                        method: 'POST',
-                        body: formData
-                    })
+                    method: 'POST',
+                    body: formData
+                })
                     .then(response => {
                         // Check if we got a JSON response
                         const contentType = response.headers.get('content-type');
@@ -234,8 +231,6 @@ $item       = $isEditMode ? $editItem : null;
 
                             // Reset the form for new entries (but not for edit form)
                             if (!formData.get('item_id')) {
-                                console.log('Resetting form (keeping dropdown defaults)...');
-
                                 // Don't use this.reset() as it resets everything
                                 // Instead, clear only specific fields
 
@@ -260,8 +255,6 @@ $item       = $isEditMode ? $editItem : null;
 
                                 // Reset validation UI
                                 this.classList.remove('was-validated');
-
-                                console.log('Form inputs cleared, dropdowns preserved');
                             }
 
                             // Refresh the appropriate data table
@@ -296,7 +289,7 @@ $item       = $isEditMode ? $editItem : null;
         const paymentDayInput = document.getElementById('payment_day');
 
         if (frequencySelect && paymentDayInput) {
-            frequencySelect.addEventListener('change', function() {
+            frequencySelect.addEventListener('change', function () {
                 const frequency = this.value;
                 // Set appropriate max value for payment day based on frequency
                 if (frequency === 'monthly') {

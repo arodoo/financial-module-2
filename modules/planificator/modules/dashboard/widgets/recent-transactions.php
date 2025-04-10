@@ -30,7 +30,7 @@
                                         <?php echo $badgeText; ?>
                                     </span>
                                 </h6>
-                                <small><?php echo date('d M Y', strtotime($transaction[$dateField])); ?></small>
+                                <small><?php echo date('d/m/Y', strtotime($transaction[$dateField])); ?></small>
                             </div>
                             <p class="mb-1"><?php echo htmlspecialchars($transaction['description'] ?: 'Pas de description'); ?>
                             </p>

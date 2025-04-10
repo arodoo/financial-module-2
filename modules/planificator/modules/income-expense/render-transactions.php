@@ -49,97 +49,97 @@ $ajaxAction = $transactionType === 'income' ? 'get_income_list' : 'get_expense_l
 </div>
 
 <script>
-$(document).ready(function() {
-    // First, store our tableId
-    var tableId = '<?php echo $tableId; ?>';
-    var $table = $('#' + tableId);
-    var transactionType = '<?php echo $transactionType; ?>';
-    var ajaxHandlerUrl = '<?php echo $ajaxHandlerUrl; ?>';
-    var startDate = $('#periodStartDate').val() || '<?php echo date('Y-m-01'); ?>';
-    var endDate = $('#periodEndDate').val() || '<?php echo date('Y-m-t'); ?>';
-    
-    // Define language settings
-    var languageSettings = {
-        "sProcessing": "Traitement en cours...",
-        "sSearch": "Rechercher&nbsp;:",
-        "sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
-        "sInfo": "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-        "sInfoEmpty": "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;léments",
-        "sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-        "sInfoPostFix": "",
-        "sLoadingRecords": "Chargement en cours...",
-        "sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
-        "sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
-        "oPaginate": {
-            "sFirst": "Premier",
-            "sPrevious": "Pr&eacute;c&eacute;dent",
-            "sNext": "Suivant",
-            "sLast": "Dernier"
-        },
-        "oAria": {
-            "sSortAscending": ": activer pour trier la colonne par ordre croissant",
-            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
-        }
-    };
-    
-    // Initialize DataTable with AJAX
-    try {
-        var dataTable = $table.DataTable({
-            "processing": true,
-            "serverSide": false, 
-            "ajax": {
-                "url": ajaxHandlerUrl,
-                "type": "GET",
-                "data": { 
-                    "action": '<?php echo $ajaxAction; ?>',
-                    "start_date": startDate,
-                    "end_date": endDate
-                },
-                "dataSrc": function(json) {
-                    return json.data || [];
-                }
+    $(document).ready(function () {
+        // First, store our tableId
+        var tableId = '<?php echo $tableId; ?>';
+        var $table = $('#' + tableId);
+        var transactionType = '<?php echo $transactionType; ?>';
+        var ajaxHandlerUrl = '<?php echo $ajaxHandlerUrl; ?>';
+        var startDate = $('#periodStartDate').val() || '<?php echo date('Y-m-01'); ?>';
+        var endDate = $('#periodEndDate').val() || '<?php echo date('Y-m-t'); ?>';
+
+        // Define language settings
+        var languageSettings = {
+            "sProcessing": "Traitement en cours...",
+            "sSearch": "Rechercher&nbsp;:",
+            "sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
+            "sInfo": "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+            "sInfoEmpty": "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;léments",
+            "sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+            "sInfoPostFix": "",
+            "sLoadingRecords": "Chargement en cours...",
+            "sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
+            "sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
+            "oPaginate": {
+                "sFirst": "Premier",
+                "sPrevious": "Pr&eacute;c&eacute;dent",
+                "sNext": "Suivant",
+                "sLast": "Dernier"
             },
-            "columns": [
-                { 
-                    "data": "transaction_date",
-                    "render": function(data, type, row) {
-                        // For sorting or filtering, return the raw date
-                        if (type === 'sort' || type === 'type') {
-                            return data || ''; // YYYY-MM-DD format is naturally sortable
-                        }
-                        
-                        // For display, format the date using string operations
-                        if (data) {
-                            const parts = data.split('-');
-                            if (parts.length === 3) {
-                                // Format as DD/MM/YYYY
-                                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            "oAria": {
+                "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+            }
+        };
+
+        // Initialize DataTable with AJAX
+        try {
+            var dataTable = $table.DataTable({
+                "processing": true,
+                "serverSide": false,
+                "ajax": {
+                    "url": ajaxHandlerUrl,
+                    "type": "GET",
+                    "data": {
+                        "action": '<?php echo $ajaxAction; ?>',
+                        "start_date": startDate,
+                        "end_date": endDate
+                    },
+                    "dataSrc": function (json) {
+                        return json.data || [];
+                    }
+                },
+                "columns": [
+                    {
+                        "data": "transaction_date",
+                        "render": function (data, type, row) {
+                            // For sorting or filtering, return the raw date
+                            if (type === 'sort' || type === 'type') {
+                                return data || ''; // YYYY-MM-DD format is naturally sortable
                             }
+
+                            // For display, format the date using string operations
+                            if (data) {
+                                const parts = data.split('-');
+                                if (parts.length === 3) {
+                                    // Format as DD/MM/YYYY
+                                    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                                }
+                            }
+                            return 'N/A';
                         }
-                        return 'N/A';
-                    }
-                },
-                { "data": "category_name" },
-                { 
-                    "data": "description",
-                    "render": function(data) {
-                        return data || 'N/A';
-                    }
-                },
-                { 
-                    "data": "amount",
-                    "className": "text-end",
-                    "render": function(data) {
-                        return '€' + parseFloat(data).toFixed(2);
-                    }
-                },
-                {
-                    "data": "id",
-                    "orderable": false,
-                    "searchable": false,
-                    "className": "text-center action-column",
-                    "render": function(data) {
-                        return `
+                    },
+                    { "data": "category_name" },
+                    {
+                        "data": "description",
+                        "render": function (data) {
+                            return data || 'N/A';
+                        }
+                    },
+                    {
+                        "data": "amount",
+                        "className": "text-end",
+                        "render": function (data) {
+                            return '€' + parseFloat(data).toFixed(2);
+                        }
+                    },
+                    {
+                        "data": "id",
+                        "orderable": false,
+                        "searchable": false,
+                        "className": "text-center action-column",
+                        "render": function (data) {
+                            return `
                             <button type="button" class="btn btn-sm btn-primary edit-transaction" data-id="${data}" title="Modifier">
                                 <i class="fas fa-edit"></i>
                             </button>
@@ -147,85 +147,85 @@ $(document).ready(function() {
                                 <i class="fas fa-trash"></i>
                             </button>
                         `;
+                        }
                     }
-                }
-            ],
-            "order": [[0, 'desc']], // Sort by transaction date in descending order (newest first)
-            "responsive": false,
-            "stateSave": false, 
-            "dom": 'Bftipr',
-            "pageLength": 5,
-            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tous"]],
-            "buttons": [
-                {
-                    extend: 'print',
-                    text: "Imprimer",
-                    exportOptions: {
+                ],
+                "order": [[0, 'desc']], // Sort by transaction date in descending order (newest first)
+                "responsive": false,
+                "stateSave": false,
+                "dom": 'Bftipr',
+                "pageLength": 5,
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tous"]],
+                "buttons": [
+                    {
+                        extend: 'print',
+                        text: "Imprimer",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        filename: "<?php echo $nom_fichier_datatable; ?>",
+                        title: "<?php echo $tableTitle; ?>",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        filename: "<?php echo $nom_fichier_datatable; ?>",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        }
+                    },
+                    {
+                        extend: 'colvis',
+                        text: "Colonnes visibles",
                         columns: [0, 1, 2, 3]
                     }
-                },
-                {
-                    extend: 'pdf',
-                    filename: "<?php echo $nom_fichier_datatable; ?>",
-                    title: "<?php echo $tableTitle; ?>",
-                    exportOptions: {
-                        columns: [0, 1, 2, 3]
+                ],
+                "columnDefs": [
+                    {
+                        targets: 0,
+                        responsivePriority: 2
+                    },
+                    {
+                        targets: 3,
+                        responsivePriority: 3
+                    },
+                    {
+                        targets: 4,
+                        responsivePriority: 1
                     }
-                }, 
-                {
-                    extend: 'csv',
-                    filename: "<?php echo $nom_fichier_datatable; ?>",
-                    exportOptions: {
-                        columns: [0, 1, 2, 3]
-                    }
-                }, 
-                {
-                    extend: 'colvis',
-                    text: "Colonnes visibles",
-                    columns: [0, 1, 2, 3]
-                }
-            ],
-            "columnDefs": [
-                { 
-                    targets: 0,
-                    responsivePriority: 2 
-                },
-                { 
-                    targets: 3,
-                    responsivePriority: 3 
-                },
-                { 
-                    targets: 4,
-                    responsivePriority: 1
-                }
-            ],
-            "language": languageSettings
-        });
-        
-        // Store the DataTable instance in a global variable for later access
-        window[tableId] = dataTable;
-        $table.data('hasData', true);
-        $table.data('dataTablesInitialized', true);
-        
-        // Add search inputs
-        $table.find('tfoot .search_table').each(function() {
-            var title = $(this).text();
-            $(this).html('<input type="text" class="form-control" placeholder="' + title + '" style="width:100%; font-weight: normal;"/>');
-        });
-        
-        // Set up column searching
-        dataTable.columns().every(function() {
-            var that = this;
-            $('input', this.footer()).on('keyup change', function() {
-                if (that.search() !== this.value) {
-                    that.search(this.value).draw();
-                }
+                ],
+                "language": languageSettings
             });
-        });
-    } catch (error) {
-        console.error("Error initializing DataTable:", error);
-        // If DataTables fails, fall back to showing an error message
-        $table.html('<div class="alert alert-danger">Erreur de chargement du tableau. Veuillez rafraîchir la page.</div>');
-    }
-});
+
+            // Store the DataTable instance in a global variable for later access
+            window[tableId] = dataTable;
+            $table.data('hasData', true);
+            $table.data('dataTablesInitialized', true);
+
+            // Add search inputs
+            $table.find('tfoot .search_table').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" class="form-control" placeholder="' + title + '" style="width:100%; font-weight: normal;"/>');
+            });
+
+            // Set up column searching
+            dataTable.columns().every(function () {
+                var that = this;
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
+                });
+            });
+        } catch (error) {
+            console.error("Error initializing DataTable:", error);
+            // If DataTables fails, fall back to showing an error message
+            $table.html('<div class="alert alert-danger">Erreur de chargement du tableau. Veuillez rafraîchir la page.</div>');
+        }
+    });
 </script>

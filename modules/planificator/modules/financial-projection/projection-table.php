@@ -38,9 +38,9 @@
                 </select>
             </div>
             
-            <button type="button" class="btn btn-sm btn-primary" id="export-csv">
+            <!-- <button type="button" class="btn btn-sm btn-primary" id="export-csv">
                 <i class="fas fa-file-csv me-1"></i> Exporter CSV
-            </button>
+            </button> -->
         </div>
     </div>
 </div>
@@ -235,7 +235,7 @@ function initTableListeners() {
     });
     
     // Export CSV functionality
-    document.getElementById('export-csv').addEventListener('click', exportProjectionToCsv);
+    //document.getElementById('export-csv').addEventListener('click', exportProjectionToCsv);
 }
 
 /**

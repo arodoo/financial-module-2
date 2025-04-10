@@ -1,6 +1,7 @@
-<!-- Month Summary -->
+
+<!-- Dashboard Summary -->
 <div class="alert alert-info">
-    Résumé financier pour
+    Tableau de bord financier
     <?php if ($currentMembre): ?>
         - <?php echo htmlspecialchars($currentMembre['prenom'] . ' ' . $currentMembre['nom']); ?>
     <?php endif; ?>

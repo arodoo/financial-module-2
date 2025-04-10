@@ -93,7 +93,7 @@ usort($activeExpenses, function ($a, $b) {
     <div class="col-12">
         <div class="card">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Paiements & Dépenses Fixes</h5>
+                <h5 class="mb-0">Le Plus Important Paiements et Dépenses Fixes</h5>
                 <a href="/Paiements-Fixes" class="btn btn-sm btn-outline-primary">Gérer</a>
             </div>
             <div class="card-body">
@@ -155,12 +155,7 @@ usort($activeExpenses, function ($a, $b) {
                                             </tr>
                                         <?php endforeach; ?>
                                         <?php if (count($activePayments) > 4): ?>
-                                            <tr>
-                                                <td colspan="4" class="text-center">
-                                                    <a href="?action=fixed-payments" class="small">Voir tous
-                                                        (<?php echo count($activePayments); ?>)</a>
-                                                </td>
-                                            </tr>
+                                            
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
@@ -195,12 +190,7 @@ usort($activeExpenses, function ($a, $b) {
                                             </tr>
                                         <?php endforeach; ?>
                                         <?php if (count($activeExpenses) > 4): ?>
-                                            <tr>
-                                                <td colspan="4" class="text-center">
-                                                    <a href="?action=fixed-payments" class="small">Voir tous
-                                                        (<?php echo count($activeExpenses); ?>)</a>
-                                                </td>
-                                            </tr>
+                                            
                                         <?php endif; ?>
                                     </tbody>
                                 </table>

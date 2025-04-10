@@ -6,26 +6,30 @@ require_once __DIR__ . '/../config/database.php';
  * 
  * Handles data retrieval and projection calculations for financial forecasting
  */
-class FinancialProjection {
+class FinancialProjection
+{
     private $conn;
     private $membre_id;
-    
-    public function __construct($membre_id = null) {
+
+    public function __construct($membre_id = null)
+    {
         // Get database connection
         $this->conn = getDbConnection();
-        
+
         // Set member ID (default to current user if not specified)
         global $id_oo;
         $this->membre_id = $membre_id ?? $id_oo;
     }
-    
+
     /**
      * Test database connection
      * @return bool Connection status
      */
-    public function testConnection() {
-        if (!$this->conn) return false;
-        
+    public function testConnection()
+    {
+        if (!$this->conn)
+            return false;
+
         try {
             $stmt = $this->conn->query("SELECT 1");
             return ($stmt !== false);
@@ -33,14 +37,16 @@ class FinancialProjection {
             return false;
         }
     }
-    
+
     /**
      * Get all fixed incomes (payments) for a user
      * @return array Income data
      */
-    public function getFixedIncomes() {
-        if (!$this->conn) return [];
-        
+    public function getFixedIncomes()
+    {
+        if (!$this->conn)
+            return [];
+
         try {
             $sql = "SELECT 
                         pf.*, 
@@ -54,24 +60,26 @@ class FinancialProjection {
                         pf.status = 'active' 
                     ORDER BY 
                         pf.start_date";
-            
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':membre_id', $this->membre_id, PDO::PARAM_INT);
             $stmt->execute();
-            
+
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             return [];
         }
     }
-    
+
     /**
      * Get all fixed expenses for a user
      * @return array Expense data
      */
-    public function getFixedExpenses() {
-        if (!$this->conn) return [];
-        
+    public function getFixedExpenses()
+    {
+        if (!$this->conn)
+            return [];
+
         try {
             $sql = "SELECT 
                         df.*, 
@@ -85,23 +93,25 @@ class FinancialProjection {
                         df.status = 'active' 
                     ORDER BY 
                         df.start_date";
-            
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':membre_id', $this->membre_id, PDO::PARAM_INT);
             $stmt->execute();
-            
+
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             return [];
         }
     }
-      /**
+    /**
      * Get current assets total value
      * @return float Total assets value
      */
-    public function getTotalAssets() {
-        if (!$this->conn) return 0;
-        
+    public function getTotalAssets()
+    {
+        if (!$this->conn)
+            return 0;
+
         try {
             $sql = "SELECT 
                         COALESCE(SUM(current_value), 0) as total_value 
@@ -109,41 +119,40 @@ class FinancialProjection {
                         assets 
                     WHERE 
                         membre_id = :membre_id";
-            
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':membre_id', $this->membre_id, PDO::PARAM_INT);
             $stmt->execute();
-            
+
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            error_log("getTotalAssets result: " . print_r($result, true));
             return floatval($result['total_value'] ?? 0);
         } catch (Exception $e) {
-            error_log("Error in getTotalAssets: " . $e->getMessage());
             return 0;
         }
     }
-    
+
     /**
      * Generate projected financial data for given timeframe and parameters
      * 
      * @param array $params Configuration parameters for projection
      * @return array Projection data by time period
      */
-    public function generateProjection($params) {
+    public function generateProjection($params)
+    {
         $projection = [];
         $fixedIncomes = $this->getFixedIncomes();
         $fixedExpenses = $this->getFixedExpenses();
-        
+
         // Default parameters with fallbacks
         $startDate = new DateTime($params['start_date'] ?? 'now');
         $years = intval($params['years'] ?? 5);
         $incomeGrowthRate = floatval($params['income_growth_rate'] ?? 2) / 100; // Convert percentage to decimal
         $expenseInflationRate = floatval($params['expense_inflation_rate'] ?? 2) / 100; // Convert percentage to decimal
         $viewMode = $params['view_mode'] ?? 'yearly'; // yearly, quarterly, monthly
-        
+
         // Check if including assets and determine initial balance
-        $includeAssets = isset($params['include_assets']) ? (bool)$params['include_assets'] : false;
-        
+        $includeAssets = isset($params['include_assets']) ? (bool) $params['include_assets'] : false;
+
         // Calculate initial balance based on settings
         if (isset($params['initial_balance']) && is_numeric($params['initial_balance'])) {
             // Use the provided initial balance
@@ -151,17 +160,17 @@ class FinancialProjection {
         } else {
             // Calculate from current income/expense balance
             $initialBalance = $this->getCurrentBalance($startDate->format('Y-m-d'));
-            
+
             // Add asset values if requested
             if ($includeAssets) {
                 $initialBalance += $this->getTotalAssets();
             }
         }
-        
+
         // Determine projection end date and interval
         $endDate = clone $startDate;
         $endDate->modify("+{$years} years");
-        
+
         // Determine interval for data points
         switch ($viewMode) {
             case 'monthly':
@@ -169,13 +178,13 @@ class FinancialProjection {
                 $dateFormat = 'Y-m';
                 $displayFormat = 'M Y';
                 break;
-                
+
             case 'quarterly':
                 $interval = 'P3M'; // 3 months
                 $dateFormat = 'Y-\QN'; // Year-QN (e.g., 2023-Q1)
                 $displayFormat = '\QN Y'; // QN Year (e.g., Q1 2023)
                 break;
-                
+
             case 'yearly':
             default:
                 $interval = 'P1Y'; // 1 year
@@ -183,17 +192,17 @@ class FinancialProjection {
                 $displayFormat = 'Y';
                 break;
         }
-        
+
         $dateInterval = new DateInterval($interval);
         $currentDate = clone $startDate;
         $runningBalance = $initialBalance;
         $period = 0;
-        
+
         // Generate projection for each time period
         while ($currentDate <= $endDate) {
             $periodLabel = $currentDate->format($dateFormat);
             $displayDate = $currentDate->format($displayFormat);
-            
+
             // Calculate incomes for this period
             $periodIncomes = $this->calculatePeriodicAmount(
                 $fixedIncomes,
@@ -202,7 +211,7 @@ class FinancialProjection {
                 $period,
                 $incomeGrowthRate
             );
-            
+
             // Calculate expenses for this period
             $periodExpenses = $this->calculatePeriodicAmount(
                 $fixedExpenses,
@@ -211,13 +220,13 @@ class FinancialProjection {
                 $period,
                 $expenseInflationRate
             );
-            
+
             // Calculate net cash flow
             $netCashFlow = $periodIncomes - $periodExpenses;
-            
+
             // Update running balance
             $runningBalance += $netCashFlow;
-            
+
             // Add period data to projection
             $projection[] = [
                 'period' => $period,
@@ -229,15 +238,15 @@ class FinancialProjection {
                 'net_flow' => $netCashFlow,
                 'balance' => $runningBalance
             ];
-            
+
             // Move to next period
             $currentDate->add($dateInterval);
             $period++;
         }
-        
+
         return $projection;
     }
-    
+
     /**
      * Calculate total amount for a period based on recurring items
      * 
@@ -248,27 +257,28 @@ class FinancialProjection {
      * @param float $growthRate Annual growth rate as decimal
      * @return float Total calculated amount
      */
-    private function calculatePeriodicAmount($items, $currentDate, $periodInterval, $periodNumber, $growthRate) {
+    private function calculatePeriodicAmount($items, $currentDate, $periodInterval, $periodNumber, $growthRate)
+    {
         $totalAmount = 0;
         $periodEnd = clone $currentDate;
         $periodEnd->add($periodInterval);
         $periodEnd->modify('-1 day'); // End of period
-        
+
         foreach ($items as $item) {
             $itemStartDate = new DateTime($item['start_date']);
-            $itemEndDate = !empty($item['end_date']) && $item['end_date'] !== '0000-00-00' 
-                ? new DateTime($item['end_date']) 
+            $itemEndDate = !empty($item['end_date']) && $item['end_date'] !== '0000-00-00'
+                ? new DateTime($item['end_date'])
                 : null;
-            
+
             // Skip if item hasn't started yet or has already ended
             if ($itemStartDate > $periodEnd || ($itemEndDate && $itemEndDate < $currentDate)) {
                 continue;
             }
-            
+
             // Calculate occurrence count in this period based on frequency
             $amount = floatval($item['amount']);
             $frequency = strtolower($item['frequency']);
-            
+
             // Apply growth/inflation based on period number
             if ($growthRate > 0 && $periodNumber > 0) {
                 // Calculate compound growth factor
@@ -277,27 +287,28 @@ class FinancialProjection {
                 $growthFactor = pow(1 + $growthRate, $years);
                 $amount = $amount * $growthFactor;
             }
-            
+
             // Convert frequency to monthly equivalent for standardized calculation
             $monthlyAmount = $this->getMonthlyEquivalent($amount, $frequency);
-            
+
             // Calculate months in period
             $monthsInPeriod = $this->getMonthsBetween($currentDate, $periodEnd);
-            
+
             // Add to total
             $totalAmount += $monthlyAmount * $monthsInPeriod;
         }
-        
+
         return $totalAmount;
     }
-    
+
     /**
      * Calculate the monthly equivalent of an amount based on frequency
      * @param float $amount The amount
      * @param string $frequency Payment frequency
      * @return float Monthly equivalent amount
      */
-    private function getMonthlyEquivalent($amount, $frequency) {
+    private function getMonthlyEquivalent($amount, $frequency)
+    {
         switch ($frequency) {
             case 'daily':
                 return $amount * 30; // Approximate
@@ -319,13 +330,14 @@ class FinancialProjection {
                 return $amount; // Default to monthly
         }
     }
-    
+
     /**
      * Get the equivalent of a DateInterval in years
      * @param DateInterval $interval The interval
      * @return float Years
      */
-    private function getIntervalInYears($interval) {
+    private function getIntervalInYears($interval)
+    {
         if ($interval->y > 0) {
             return $interval->y + ($interval->m / 12);
         } else if ($interval->m > 0) {
@@ -335,28 +347,29 @@ class FinancialProjection {
         }
         return 1; // Default to 1 year
     }
-    
+
     /**
      * Calculate number of months between two dates
      * @param DateTime $start Start date
      * @param DateTime $end End date
      * @return float Number of months
      */
-    private function getMonthsBetween($start, $end) {
+    private function getMonthsBetween($start, $end)
+    {
         $startObj = clone $start;
         $endObj = clone $end;
-        
+
         $years = $endObj->format('Y') - $startObj->format('Y');
         $months = $endObj->format('n') - $startObj->format('n');
         $days = $endObj->format('j') - $startObj->format('j');
-        
+
         // Adjust for month transitions with different day counts
         if ($days < 0) {
             $monthEndDay = $startObj->format('t');
             $months--;
             $days += $monthEndDay;
         }
-        
+
         $totalMonths = ($years * 12) + $months + ($days / 30);
         return max(0, $totalMonths);
     }
@@ -366,13 +379,15 @@ class FinancialProjection {
      * @param string $startDate The start date for calculation
      * @return float The current balance
      */
-    public function getCurrentBalance($startDate = null) {
-        if (!$this->conn) return 0;
-        
+    public function getCurrentBalance($startDate = null)
+    {
+        if (!$this->conn)
+            return 0;
+
         if (!$startDate) {
             $startDate = date('Y-m-d');
         }
-        
+
         try {
             // Get total income until start date (all historical transactions)
             $sql = "SELECT COALESCE(SUM(amount), 0) as total FROM income_transactions 
@@ -383,8 +398,7 @@ class FinancialProjection {
             $stmt->execute();
             $incomeResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $totalIncome = floatval($incomeResult['total'] ?? 0);
-            
-            // For detailed debugging
+
             $sql = "SELECT id, amount, transaction_date FROM income_transactions 
                     WHERE membre_id = :membre_id AND transaction_date <= :start_date
                     ORDER BY transaction_date DESC";
@@ -393,8 +407,7 @@ class FinancialProjection {
             $stmt->bindValue(':start_date', $startDate, PDO::PARAM_STR);
             $stmt->execute();
             $incomeDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            error_log("Financial Projection - Income Transactions: " . json_encode($incomeDetails));
-            
+
             // Get total expenses until start date (all historical transactions) 
             $sql = "SELECT COALESCE(SUM(amount), 0) as total FROM expense_transactions 
                     WHERE membre_id = :membre_id AND transaction_date <= :start_date";
@@ -404,8 +417,7 @@ class FinancialProjection {
             $stmt->execute();
             $expenseResult = $stmt->fetch(PDO::FETCH_ASSOC);
             $totalExpenses = floatval($expenseResult['total'] ?? 0);
-            
-            // For detailed debugging
+
             $sql = "SELECT id, amount, transaction_date FROM expense_transactions 
                     WHERE membre_id = :membre_id AND transaction_date <= :start_date
                     ORDER BY transaction_date DESC";
@@ -414,20 +426,11 @@ class FinancialProjection {
             $stmt->bindValue(':start_date', $startDate, PDO::PARAM_STR);
             $stmt->execute();
             $expenseDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            error_log("Financial Projection - Expense Transactions: " . json_encode($expenseDetails));
-            
-            // For debugging
-            error_log("Financial Projection - membre_id: " . $this->membre_id);
-            error_log("Financial Projection - startDate: " . $startDate);
-            error_log("Financial Projection - Income Total: " . $totalIncome);
-            error_log("Financial Projection - Expense Total: " . $totalExpenses);
-            error_log("Financial Projection - Balance: " . ($totalIncome - $totalExpenses));
-            
+
             // Calculate balance
             $balance = $totalIncome - $totalExpenses;
             return $balance;
         } catch (Exception $e) {
-            error_log('Error calculating current balance: ' . $e->getMessage());
             return 0;
         }
     }

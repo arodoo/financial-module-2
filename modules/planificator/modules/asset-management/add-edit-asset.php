@@ -205,7 +205,7 @@ $membre_id = $id_oo ?? 1; // Default to 1 if not set
                         }
 
                         // Show success message
-                        popup_alert(response.message || 'Actif enregistré avec succès', "green filledlight", "#FFFFFF", "uk-icon-check");
+                        popup_alert(response.message || 'Actif enregistré avec succès', "green filledlight", "#009900", "uk-icon-check");
 
                         // Reload the data table if it exists
                         if (window.assetManagementTable) {

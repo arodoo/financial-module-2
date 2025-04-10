@@ -176,12 +176,9 @@ function fetchBalanceData() {
     })
     .then(data => {
         if (data.success) {
-            console.log('Balance data received:', data.data);
             // Store values for later use - ensure they're valid numbers
             originalBalance = parseFloat(data.data.current_balance) || 0;
             totalAssetsValue = parseFloat(data.data.total_assets) || 0;
-            
-            console.log('Parsed values - Balance:', originalBalance, 'Assets:', totalAssetsValue);
             
             // Initialize the field with current values
             updateInitialBalanceField(true);
@@ -221,15 +218,10 @@ function updateInitialBalanceField(isInitial = false) {
         setTimeout(() => balanceSource.classList.remove('updated'), 1000);
     }
     
-    console.log('Updating balance - Include assets:', includeAssets);
-    console.log('Current values - Original balance:', originalBalance, 'Assets value:', totalAssetsValue);
-    
     // Calculate new balance based on checkbox state
     const newBalance = includeAssets ? 
         originalBalance + totalAssetsValue : 
         originalBalance;
-    
-    console.log('New balance calculated:', newBalance);
     
     // Update the field - ensure it's a valid number
     balanceField.value = isNaN(newBalance) ? 0 : newBalance.toFixed(0);

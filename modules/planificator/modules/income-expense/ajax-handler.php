@@ -17,15 +17,15 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/function/INCLUDE-FUNCTION-HAUT-CMS-CO
 if (isset($user)) {
     // Clear any previous output that might have occurred during includes
     ob_clean();
-    
+
     // Require necessary model files
     require_once __DIR__ . '/../../models/Income.php';
     require_once __DIR__ . '/../../models/Expense.php';
-    
+
     // Initialize models
     $incomeModel = new Income();
     $expenseModel = new Expense();
-    
+
     // Set appropriate headers
     header('Content-Type: application/json');
     header('Cache-Control: no-cache, must-revalidate');
@@ -33,7 +33,7 @@ if (isset($user)) {
     // Handle GET requests (reading data)
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
         $response = ['success' => false, 'error' => 'Invalid action'];
-        
+
         // Get income transaction
         if ($_GET['action'] === 'get_income_transaction' && isset($_GET['id'])) {
             $transaction = $incomeModel->getTransactionById($_GET['id']);
@@ -43,7 +43,7 @@ if (isset($user)) {
             } else {
                 $response['error'] = 'Income transaction not found';
             }
-        } 
+        }
         // Get expense transaction
         elseif ($_GET['action'] === 'get_expense_transaction' && isset($_GET['id'])) {
             $transaction = $expenseModel->getTransactionById($_GET['id']);
@@ -74,15 +74,15 @@ if (isset($user)) {
                 'data' => $transactions
             ];
         }
-        
+
         // Output the JSON response
         echo json_encode($response);
-    } 
+    }
     // Handle POST requests (creating, updating, deleting)
     elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $response = ['success' => false, 'error' => 'Invalid action'];
         $data = $_POST;
-        
+
         // Add income transaction
         if ($data['action'] === 'add_income') {
             $result = $incomeModel->addIncome(
@@ -91,7 +91,7 @@ if (isset($user)) {
                 $data['description'] ?? '',
                 $data['transaction_date']
             );
-            
+
             if ($result) {
                 $response = [
                     'success' => true,
@@ -101,7 +101,7 @@ if (isset($user)) {
                 $response['error'] = 'Erreur lors de l\'ajout du revenu';
             }
         }
-        
+
         // Add expense transaction
         elseif ($data['action'] === 'add_expense') {
             $result = $expenseModel->addExpense(
@@ -110,7 +110,7 @@ if (isset($user)) {
                 $data['description'] ?? '',
                 $data['transaction_date']
             );
-            
+
             if ($result) {
                 $response = [
                     'success' => true,
@@ -120,7 +120,7 @@ if (isset($user)) {
                 $response['error'] = 'Erreur lors de l\'ajout de la dépense';
             }
         }
-        
+
         // Update income transaction
         elseif ($data['action'] === 'update_income') {
             $result = $incomeModel->updateIncome(
@@ -130,7 +130,7 @@ if (isset($user)) {
                 $data['description'] ?? '',
                 $data['transaction_date']
             );
-            
+
             if ($result) {
                 $response = [
                     'success' => true,
@@ -140,7 +140,7 @@ if (isset($user)) {
                 $response['error'] = 'Erreur lors de la mise à jour du revenu';
             }
         }
-        
+
         // Update expense transaction
         elseif ($data['action'] === 'update_expense') {
             $result = $expenseModel->updateExpense(
@@ -150,7 +150,7 @@ if (isset($user)) {
                 $data['description'] ?? '',
                 $data['transaction_date']
             );
-            
+
             if ($result) {
                 $response = [
                     'success' => true,
@@ -160,11 +160,11 @@ if (isset($user)) {
                 $response['error'] = 'Erreur lors de la mise à jour de la dépense';
             }
         }
-        
+
         // Delete income transaction
         elseif ($data['action'] === 'delete_income') {
             $result = $incomeModel->deleteIncome($data['transaction_id']);
-            
+
             if ($result) {
                 $response = [
                     'success' => true,
@@ -174,11 +174,11 @@ if (isset($user)) {
                 $response['error'] = 'Erreur lors de la suppression du revenu';
             }
         }
-        
+
         // Delete expense transaction
         elseif ($data['action'] === 'delete_expense') {
             $result = $expenseModel->deleteExpense($data['transaction_id']);
-            
+
             if ($result) {
                 $response = [
                     'success' => true,
@@ -188,27 +188,26 @@ if (isset($user)) {
                 $response['error'] = 'Erreur lors de la suppression de la dépense';
             }
         }
-        
+
         // Get summary data for updating the UI
         if ($response['success']) {
             $startDate = $data['start_date'] ?? date('Y-m-01');
             $endDate = $data['end_date'] ?? date('Y-m-t');
-            
+
             $totalIncome = $incomeModel->getTotalIncome($startDate, $endDate);
             $totalExpense = $expenseModel->getTotalExpense($startDate, $endDate);
             $netBalance = $totalIncome - $totalExpense;
-            
+
             $response['summary'] = [
                 'totalIncome' => $totalIncome,
                 'totalExpense' => $totalExpense,
                 'netBalance' => $netBalance
             ];
         }
-        
+
         // Output the JSON response
         echo json_encode($response);
-    }
-    else {
+    } else {
         // If no action is specified, return an error
         echo json_encode(['success' => false, 'error' => 'No action specified']);
     }

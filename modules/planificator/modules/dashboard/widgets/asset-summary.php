@@ -3,7 +3,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Aperçu des Actifs</h5>
+                <h5 class="mb-0">Les actifs les plus précieux</h5>
                 <a href="/Gestion-Actifs" class="btn btn-sm btn-outline-primary">Gérer les Actifs</a>
             </div>
             <div class="card-body">

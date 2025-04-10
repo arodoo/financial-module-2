@@ -2,7 +2,7 @@
 <div class="col-lg-6 mb-4">
     <div class="card">
         <div class="card-header">
-            <h5 class="mb-0">Dépenses par Catégorie</h5>
+            <h5 class="mb-0">Top Dépenses par Catégorie</h5>
         </div>
         <div class="card-body">
             <?php if (empty($expenseByCategory)): ?>

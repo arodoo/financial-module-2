@@ -74,7 +74,7 @@ if (!in_array($activeTab, $validTabs))
           require_once __DIR__ . '/../../controllers/FixedItemController.php';
           $paymentController = new FixedItemController('payment');
           $categories = $paymentController->getCategories();
-          
+
           include __DIR__ . '/item-form.php';
           ?>
         </div>
@@ -105,7 +105,7 @@ if (!in_array($activeTab, $validTabs))
           require_once __DIR__ . '/../../controllers/FixedItemController.php';
           $expenseController = new FixedItemController('expense');
           $categories = $expenseController->getCategories();
-          
+
           include __DIR__ . '/item-form.php';
           ?>
         </div>
@@ -139,20 +139,20 @@ if (!in_array($activeTab, $validTabs))
 
 <script>
   // Initialize functionality when document is ready
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     // Prevent multiple initializations by adding a flag
     if (window.fixedItemsInitialized) return;
     window.fixedItemsInitialized = true;
-    
+
     // Initialize DataTables for both tabs regardless of which tab is active
     if (typeof initPaymentTableScripts === 'function') {
       initPaymentTableScripts('fixedPaymentsTable', '<?php echo $ajaxHandlerUrl; ?>');
     }
-    
+
     if (typeof initExpenseTableScripts === 'function') {
       initExpenseTableScripts('fixedExpensesTable', '<?php echo $ajaxHandlerUrl; ?>');
     }
-    
+
     // Add event listener for tab changes to ensure tables are properly rendered when switching tabs
     const tabs = document.querySelectorAll('button[data-bs-toggle="tab"]');
     tabs.forEach(tab => {

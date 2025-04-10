@@ -23,42 +23,27 @@ if (!empty($_SESSION['4M8e7M5b1R2e8s']) || !empty($user)) {
     'school-fee' => 'Frais scolaires'
 ];
 
-    // Route requests based on the action parameter
     $action = isset($_GET['action']) ? $_GET['action'] : 'dashboard';
 
-    // Validate action
     if (!array_key_exists($action, $modules)) {
         $action = 'dashboard';
     }
     ?>
 
-    <!-- Fix CSS path - correct path to match file location -->
     <link rel="stylesheet" href="/modules/planificator/modules/modules.css">
 
     <nav id="main-nav" class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 border rounded">
         <div class="container">
             <a class="navbar-brand" href="#">Planification et gestion financière pour la Famile</a>
-            <!-- Membre indicator -->
-            <span class="navbar-text me-3 text-white">
-                <?php if ($currentMembre): ?>
-                <?php else: ?>
-                    ID Membre: <?php echo $id_oo; ?>
-                <?php endif; ?>
-            </span>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container fixed-container">
         <div class=" content-card">
             <div class="card-header bg-light">
                 <h2 class="card-title h4 my-2"><?php echo $modules[$action]; ?></h2>
             </div>
-            <div class="card-body">
-               <!--  <div class="row">
-                    <div class="col-12">
-                        
-                    </div>
-                </div> -->
+            <div class="card-body fixed-card-body">
 
                 <?php
                 // Display content based on action
