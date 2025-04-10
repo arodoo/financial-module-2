@@ -21,14 +21,19 @@ $membre_id = $id_oo ?? 1; // Default to 1 if not set
             <label for="asset_name" class="form-label">Nom de l'actif</label>
             <input type="text" class="form-control" id="asset_name" name="asset_name"
                 value="<?php echo $isEditMode ? htmlspecialchars($asset['name']) : ''; ?>" required>
-        </div>
-
-        <div class="mb-3">
+        </div>        <div class="mb-3">
             <label for="category_id" class="form-label">Catégorie</label>
             <select class="form-select" id="category_id" name="category_id" required>
                 <option value="">Choisir une catégorie</option>
                 <?php foreach ($categories as $category): ?>
-                    <option value="<?php echo $category['id']; ?>" <?php echo ($isEditMode && $asset['category_id'] == $category['id']) ? 'selected' : ''; ?>>
+                    <option value="<?php echo $category['id']; ?>" 
+                        <?php 
+                            // Check for selected value in both add mode and edit mode
+                            if (($isEditMode && $asset['category_id'] == $category['id']) || 
+                                (!$isEditMode && isset($_POST['category_id']) && $_POST['category_id'] == $category['id'])) {
+                                echo 'selected';
+                            }
+                        ?>>
                         <?php echo htmlspecialchars($category['name']); ?>
                     </option>
                 <?php endforeach; ?>
@@ -175,11 +180,18 @@ $membre_id = $id_oo ?? 1; // Default to 1 if not set
                     return response.json();
                 })
                 .then(response => {
-                    // Hide spinner and enable button
-                    submitBtn.disabled = false;
+                    // Hide spinner and enable button                    submitBtn.disabled = false;
                     spinner.classList.add('d-none');
 
                     if (response.success) {
+                        // Close the modal - Add this code
+                        const modalId = 'addAssetModal';
+                        const modal = document.getElementById(modalId);
+                        if (modal && typeof bootstrap !== 'undefined') {
+                            const modalInstance = bootstrap.Modal.getInstance(modal);
+                            if (modalInstance) modalInstance.hide();
+                        }
+                        
                         // Reset form for new entries
                         if (!isEdit) {
                             form.querySelectorAll('input:not([type="hidden"])').forEach(input => {

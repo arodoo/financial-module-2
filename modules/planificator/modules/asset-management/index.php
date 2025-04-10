@@ -129,23 +129,17 @@ $ajaxHandlerUrl = '/modules/planificator/modules/asset-management/ajax-handler.p
     </div>
 <?php endif; ?>
 
-<div class="row">
-    <!-- Left Column: Form or Asset List -->
-    <div class="col-md-5">
-        <?php if ($editAsset): ?>
-            <?php include __DIR__ . '/add-edit-asset.php'; ?>
-        <?php else: ?>
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Ajouter un Actif</h5>
-                </div>
-                <?php include __DIR__ . '/add-edit-asset.php'; ?>
-            </div>
-        <?php endif; ?>
+<div class="row mb-3">
+    <div class="col-12 text-end">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAssetModal">
+            <i class="fas fa-plus"></i> Ajouter un Actif
+        </button>
     </div>
+</div>
 
-    <!-- Right Column: Asset Details or Assets List -->
-    <div class="col-md-7">
+<div class="row">
+    <!-- Full-width column for Asset Details or Assets List -->
+    <div class="col-md-12">
         <?php if ($viewAsset): ?>
             <?php include __DIR__ . '/view-asset.php'; ?>
         <?php elseif (!empty($assets)): ?>
@@ -173,7 +167,25 @@ $ajaxHandlerUrl = '/modules/planificator/modules/asset-management/ajax-handler.p
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
+        <?php endif; ?>    </div>
+</div>
+
+<!-- Add Asset Modal -->
+<div class="modal fade" id="addAssetModal" tabindex="-1" aria-labelledby="addAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="addAssetModalLabel">Ajouter un Actif</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <?php
+                $isEditMode = false;
+                $asset = null;
+                include __DIR__ . '/add-edit-asset.php';
+                ?>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -381,9 +393,7 @@ $ajaxHandlerUrl = '/modules/planificator/modules/asset-management/ajax-handler.p
     // Clean up modal when closed - matching income-expense pattern
     $('#editAssetModal').on('hidden.bs.modal', function () {
         $('#edit-asset-form-container').empty();
-    });
-
-    // Initialize when document is ready
+    });    // Initialize when document is ready
     document.addEventListener('DOMContentLoaded', function () {
         // Initialize currency inputs
         initCurrencyInputs();
@@ -394,6 +404,93 @@ $ajaxHandlerUrl = '/modules/planificator/modules/asset-management/ajax-handler.p
                 let value = input.value.replace(/\D/g, '');
                 input.value = new Intl.NumberFormat('fr-FR').format(value);
             }
+        });
+    });
+
+    // Function to submit new asset form via AJAX with modal handling
+    window.submitNewAssetForm = function(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        // Add appropriate action parameter
+        formData.append('action', 'save_asset');
+        formData.append('save_asset', '1');
+
+        // Show spinner and disable button
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const spinner = submitBtn.querySelector('.spinner-border');
+        submitBtn.disabled = true;
+        spinner.classList.remove('d-none');
+
+        // Clean currency inputs for proper backend processing
+        const currencyInputs = form.querySelectorAll('.currency-input');
+        currencyInputs.forEach(input => {
+            const cleanValue = input.value.replace(/\s/g, '');
+            formData.set(input.name, cleanValue);
+        });
+
+        // Submit via AJAX
+        fetch('<?php echo $ajaxHandlerUrl; ?>', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(response => {
+            // Hide spinner and enable button
+            submitBtn.disabled = false;
+            spinner.classList.add('d-none');
+
+            if (response.success) {
+                // Close the modal
+                const modal = document.getElementById('addAssetModal');
+                if (modal) {
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    if (modalInstance) modalInstance.hide();
+                }
+
+                // Show success message
+                popup_alert(response.message || 'Actif enregistré avec succès', "green filledlight", "#009900", "uk-icon-check");
+
+                // Reload the data table
+                if (window.assetManagementTable) {
+                    window.assetManagementTable.ajax.reload();
+                }
+
+                // Reset form
+                form.reset();
+            } else {
+                // Show error message
+                popup_alert(response.error || 'Une erreur est survenue', "#ff0000", "#FFFFFF", "uk-icon-close");
+            }
+        })
+        .catch(error => {
+            // Hide spinner and enable button
+            submitBtn.disabled = false;
+            spinner.classList.add('d-none');
+            
+            popup_alert('Erreur lors de l\'enregistrement de l\'actif', "#ff0000", "#FFFFFF", "uk-icon-close");
+        });
+    };
+
+    // Clean up modal when closed - matching income-expense pattern
+    $('#editAssetModal').on('hidden.bs.modal', function () {
+        $('#edit-asset-form-container').empty();
+    });
+
+    // Add event handler to clean up add asset modal when closed
+    $('#addAssetModal').on('hidden.bs.modal', function () {
+        // Reset form
+        const form = document.getElementById('asset-form');
+        if (form) form.reset();
+        
+        // Clear validation styling
+        $('#asset-form').removeClass('was-validated');
+        
+        // Format currency inputs
+        document.querySelectorAll('#asset-form .currency-input').forEach(input => {
+            input.value = '';
         });
     });
 </script>
