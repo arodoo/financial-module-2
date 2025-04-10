@@ -50,6 +50,24 @@ $filename = $tableTitle . '-' . date('d-m-Y', time());
     </div>
 </div>
 
+<style>
+    /* Force DataTables to use full width and respect container */
+    table.dataTable {
+        width: 100% !important;
+    }
+    
+    /* Fix for table cells having fixed widths */
+    .dataTable th, .dataTable td {
+        width: auto !important;
+    }
+    
+    /* Fix for action buttons spacing */
+    .action-column {
+        white-space: nowrap;
+        width: 1%;
+    }
+</style>
+
 <script>
     // Use IIFE to avoid polluting global namespace and prevent duplicate bindings
     (function() {
@@ -417,6 +435,21 @@ $filename = $tableTitle . '-' . date('d-m-Y', time());
 
             // Store the DataTable instance globally for access from other scripts
             window[tableId] = itemDataTable;
+
+            // Fix for tables in hidden tabs - ensure proper width for expense table
+            if (tableId === 'fixedExpensesTable') {
+                // When the expense tab is shown, force columns to adjust
+                $(document).on('shown.bs.tab', 'button[data-bs-target="#expenses"]', function() {
+                    setTimeout(function() {
+                        if (window.fixedExpensesTable) {
+                            // Remove any inline width from the table
+                            $('#fixedExpensesTable').css('width', '100%');
+                            // Force DataTable to recalculate all column widths
+                            window.fixedExpensesTable.columns.adjust();
+                        }
+                    }, 10);
+                });
+            }
 
             // Add search functionality for each column
             $('#' + tableId + ' tfoot .search_table').each(function () {

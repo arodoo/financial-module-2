@@ -42,9 +42,9 @@ $ajaxHandlerUrl = '/modules/planificator/modules/income-expense/ajax-handler.php
 
 <!-- Income Add Modal -->
 <div class="modal fade" id="addIncomeModal" tabindex="-1" aria-labelledby="addIncomeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
+      <div class="modal-header bg-success text-white">
         <h5 class="modal-title" id="addIncomeModalLabel">Ajouter Nouveau Revenu</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -66,13 +66,12 @@ $ajaxHandlerUrl = '/modules/planificator/modules/income-expense/ajax-handler.php
             <div class="mb-3">
                 <label for="income_date" class="form-label">Date</label>
                 <input type="date" class="form-control" id="income_date" name="transaction_date" value="<?php echo date('Y-m-d'); ?>" required>
-            </div>
-            <div class="mb-3">
+            </div>            <div class="mb-3">
                 <label for="income_description" class="form-label">Description</label>
                 <textarea class="form-control" id="income_description" name="description" rows="3"></textarea>
             </div>
             <input type="hidden" name="action" value="add_income">
-            <button type="submit" class="btn btn-primary w-100">Ajouter Revenu</button>
+            <button type="submit" class="btn btn-success w-100">Ajouter Revenu</button>
         </form>
       </div>
     </div>
@@ -81,7 +80,7 @@ $ajaxHandlerUrl = '/modules/planificator/modules/income-expense/ajax-handler.php
 
 <!-- Expense Add Modal -->
 <div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="addExpenseModalLabel">Ajouter Nouvelle Dépense</h5>
@@ -120,9 +119,9 @@ $ajaxHandlerUrl = '/modules/planificator/modules/income-expense/ajax-handler.php
 
 <!-- Income Edit Modal -->
 <div class="modal fade" id="editIncomeModal" tabindex="-1" aria-labelledby="editIncomeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
+      <div class="modal-header bg-success text-white">
         <h5 class="modal-title" id="editIncomeModalLabel">Modifier Revenu</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -135,7 +134,7 @@ $ajaxHandlerUrl = '/modules/planificator/modules/income-expense/ajax-handler.php
 
 <!-- Expense Edit Modal -->
 <div class="modal fade" id="editExpenseModal" tabindex="-1" aria-labelledby="editExpenseModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="editExpenseModalLabel">Modifier Dépense</h5>
@@ -165,13 +164,12 @@ $(document).ready(function() {
     // Period dates for AJAX requests
     const startDate = $('#periodStartDate').val();
     const endDate = $('#periodEndDate').val();
-    
-    // Function to build a complete form from scratch
+      // Function to build a complete form from scratch
     function buildTransactionForm(type, data, categories) {
         const formId = `edit-${type}-form`;
         const action = `update_${type}`;
         const buttonText = type === 'income' ? 'Revenu' : 'Dépense';
-        const buttonClass = type === 'income' ? 'primary' : 'danger';
+        const buttonClass = type === 'income' ? 'success' : 'danger';
         
         // Create a complete form with all elements
         let formHtml = `
