@@ -5,7 +5,25 @@
             <h5 class="mb-0">Transactions Récentes</h5>
         </div>
         <div class="card-body">
-            <?php if (empty($recentTransactions)): ?>
+            <?php 
+            // Function to translate frequency terms to French
+            function translateFrequency($frequency) {
+                $translations = [
+                    'monthly' => 'mensuel',
+                    'weekly' => 'hebdomadaire',
+                    'daily' => 'quotidien',
+                    'yearly' => 'annuel',
+                    'annual' => 'annuel',
+                    'quarterly' => 'trimestriel',
+                    'biannual' => 'semestriel',
+                    'semiannual' => 'semestriel',
+                    'bimonthly' => 'bimensuel'
+                ];
+                
+                return isset($translations[strtolower($frequency)]) ? $translations[strtolower($frequency)] : $frequency;
+            }
+            
+            if (empty($recentTransactions)): ?>
                 <p class="text-muted">Aucune transaction enregistrée pour le moment.</p>
             <?php else: ?>
                 <div class="list-group">
@@ -38,7 +56,7 @@
                                 <small class="text-muted">
                                     <?php echo $isIncome ? 'Revenu' : 'Dépense'; ?>
                                     <?php if ($isFixed && isset($transaction['frequency'])): ?>
-                                        <span class="ms-1">(<?php echo htmlspecialchars($transaction['frequency']); ?>)</span>
+                                        <span class="ms-1">(<?php echo htmlspecialchars(translateFrequency($transaction['frequency'])); ?>)</span>
                                     <?php endif; ?>
                                 </small>
                                 <span class="<?php echo $textColorClass; ?>">
