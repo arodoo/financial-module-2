@@ -22,28 +22,99 @@
                     Revenus vs Dépenses
                 </button>
             </li>
-        </ul>
-        
-        <div class="tab-content" id="chartTabContent">
-            <!-- Balance Evolution Chart -->
-            <div class="tab-pane fade show active pt-4" id="balance-chart-container" role="tabpanel" aria-labelledby="balance-tab">
-                <canvas id="balanceChart" height="300"></canvas>
+        </ul>          <div class="tab-content" id="chartTabContent">            <!-- Balance Evolution Chart -->
+            <div class="tab-pane fade show active pt-3" id="balance-chart-container" role="tabpanel" aria-labelledby="balance-tab">
+                <div class="chart-responsive-container">
+                    <canvas id="balanceChart"></canvas>
+                </div>
             </div>
             
             <!-- Cash Flow Chart -->
-            <div class="tab-pane fade pt-4" id="cash-flow-chart-container" role="tabpanel" aria-labelledby="cash-flow-tab">
-                <canvas id="cashFlowChart" height="300"></canvas>
+            <div class="tab-pane fade pt-3" id="cash-flow-chart-container" role="tabpanel" aria-labelledby="cash-flow-tab">
+                <div class="chart-responsive-container">
+                    <canvas id="cashFlowChart"></canvas>
+                </div>
             </div>
             
             <!-- Income vs Expense Comparison Chart -->
-            <div class="tab-pane fade pt-4" id="comparison-chart-container" role="tabpanel" aria-labelledby="comparison-tab">
-                <canvas id="comparisonChart" height="300"></canvas>
+            <div class="tab-pane fade pt-3" id="comparison-chart-container" role="tabpanel" aria-labelledby="comparison-tab">
+                <div class="chart-responsive-container">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
             </div>
-        </div>
-    </div>
+        </div>    </div>
 </div>
 
+<style>
+    /* Responsive chart styling with viewport units */
+    .tab-pane {
+        position: relative;
+        overflow: hidden; /* Prevent overflow */
+    }
+    
+    .chart-responsive-container {
+        position: relative;
+        width: 100%;
+        height: 45vh; /* Use viewport height instead of fixed pixels */
+        max-height: 450px; /* Maximum height */
+        min-height: 200px; /* Minimum height */
+    }
+    
+    /* Adjust for different screen sizes */
+    @media (max-width: 992px) {
+        .chart-responsive-container {
+            height: 40vh;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .chart-responsive-container {
+            height: 35vh; /* Take up more vertical space on mobile */
+            max-height: 350px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .chart-responsive-container {
+            height: 45vh; /* Even more space on small phones */
+            min-height: 250px;
+        }
+    }
+</style>
+
 <script>
+// Dynamic aspect ratio based on screen size
+function getDynamicAspectRatio() {
+    const width = window.innerWidth;
+    if (width < 576) return 1.2; // Small phones
+    if (width < 768) return 1.5; // Mobile
+    if (width < 992) return 1.8; // Tablets
+    return 2.2; // Desktop
+}
+
+// Enhanced responsive options for charts
+function getResponsiveChartOptions(baseOptions) {
+    return {
+        ...baseOptions,
+        responsive: true,
+        maintainAspectRatio: false, // Let the container control size
+        plugins: {
+            ...baseOptions.plugins,
+            legend: {
+                ...baseOptions.plugins?.legend,
+                position: 'top',
+                labels: {
+                    boxWidth: window.innerWidth < 768 ? 12 : 20,
+                    padding: window.innerWidth < 768 ? 8 : 10,
+                    font: {
+                        size: window.innerWidth < 768 ? 10 : 12
+                    }
+                }
+            }
+        }
+    };
+}
+
 /**
  * Initialize all charts with projection data
  * @param {Array} projectionData The financial projection data
@@ -85,8 +156,7 @@ function initBalanceChart(projectionData) {
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, 'rgba(54, 162, 235, 0.2)');
     gradient.addColorStop(1, 'rgba(54, 162, 235, 0)');
-    
-    // Create the chart
+      // Create the chart with improved responsive options
     chartInstances.balanceChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -103,8 +173,7 @@ function initBalanceChart(projectionData) {
                 pointBackgroundColor: 'rgba(54, 162, 235, 1)'
             }]
         },
-        options: {
-            responsive: true,
+        options: getResponsiveChartOptions({
             plugins: {
                 legend: {
                     position: 'top',
@@ -129,7 +198,7 @@ function initBalanceChart(projectionData) {
                     }
                 }
             }
-        }
+        })
     });
 }
 
@@ -159,8 +228,7 @@ function initCashFlowChart(projectionData) {
     // Extract data for the chart
     const labels = projectionData.map(data => data.display_date);
     const netFlowData = projectionData.map(data => data.net_flow);
-    
-    // Create the chart
+      // Create the chart with improved responsive options
     chartInstances.cashFlowChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -173,8 +241,7 @@ function initCashFlowChart(projectionData) {
                 borderWidth: 1
             }]
         },
-        options: {
-            responsive: true,
+        options: getResponsiveChartOptions({
             plugins: {
                 legend: {
                     position: 'top',
@@ -199,7 +266,7 @@ function initCashFlowChart(projectionData) {
                     }
                 }
             }
-        }
+        })
     });
 }
 
@@ -237,8 +304,7 @@ function initComparisonChart(projectionData) {
     const labels = projectionData.map(data => data.display_date);
     const incomeData = projectionData.map(data => data.incomes);
     const expenseData = projectionData.map(data => data.expenses);
-    
-    // Create the chart
+      // Create the chart with improved responsive options
     chartInstances.comparisonChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -260,8 +326,7 @@ function initComparisonChart(projectionData) {
                 }
             ]
         },
-        options: {
-            responsive: true,
+        options: getResponsiveChartOptions({
             plugins: {
                 legend: {
                     position: 'top',
@@ -286,7 +351,7 @@ function initComparisonChart(projectionData) {
                     }
                 }
             }
-        }
+        })
     });
 }
 
