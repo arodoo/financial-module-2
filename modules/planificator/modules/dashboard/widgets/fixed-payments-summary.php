@@ -117,7 +117,7 @@ usort($activeExpenses, function ($a, $b) {
     <div class="col-12">
         <div class="card">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Le Plus Important Paiements et Dépenses Fixes</h5>
+                <h5 class="mb-0">Vos Eléments Fixes</h5>
                 <a href="/Paiements-Fixes" class="btn btn-sm btn-outline-primary">Gérer</a>
             </div>
             <div class="card-body">

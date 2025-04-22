@@ -23,10 +23,10 @@ if (!empty($_SESSION['4M8e7M5b1R2e8s']) || !empty($user)) {
         'school-fee' => 'Frais scolaires',
     ];
 
-    // Add personalized descriptions for each module
+    // Personalized descriptions for each module
     $moduleDescriptions = [
-        'dashboard' => 'Vue d\'ensemble de votre situation financière',
-        'income-expense' => 'Gérez et suivez vos revenus et dépenses',
+        'dashboard' => 'Cette page résume les éléments principaux de vos charges et vos ressources: données pour le mois en cours, transactions récentes et top dépenses, visualisation des éléments fixes ainsi que de vos actifs financiers.',
+        'income-expense' => 'Gérez et suivez les revenus et dépenses à caractère ponctuel ou exceptionnel',
         'fixed-payments' => 'Configurez vos ressources et charges récurrentes',
         'asset-management' => 'Suivez la valeur et l\'évolution de vos actifs',
         'financial-projection' => 'Planifiez votre avenir financier',
