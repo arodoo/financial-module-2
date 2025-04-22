@@ -11,9 +11,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/Configurations_modules.php';
 $dir_fonction = $_SERVER['DOCUMENT_ROOT'] . '/';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/function/INCLUDE-FUNCTION-HAUT-CMS-CODI-ONE.php';
 
-// Now we should have access to the $id_oo variable from the included Configurations.php
-
-// Only proceed if the user is logged in (like in the Notifications file)
 if (isset($user)) {
     // Clear any previous output that might have occurred during includes
     ob_clean();
@@ -58,7 +55,8 @@ if (isset($user)) {
         elseif ($_GET['action'] === 'get_income_list') {
             $startDate = $_GET['start_date'] ?? date('Y-m-01');
             $endDate = $_GET['end_date'] ?? date('Y-m-t');
-            $transactions = $incomeModel->getIncomeTransactions($startDate, $endDate);
+            // Remove date parameters to get all transactions
+            $transactions = $incomeModel->getIncomeTransactions();
             $response = [
                 'success' => true,
                 'data' => $transactions
@@ -68,7 +66,8 @@ if (isset($user)) {
         elseif ($_GET['action'] === 'get_expense_list') {
             $startDate = $_GET['start_date'] ?? date('Y-m-01');
             $endDate = $_GET['end_date'] ?? date('Y-m-t');
-            $transactions = $expenseModel->getExpenseTransactions($startDate, $endDate);
+            // Remove date parameters to get all transactions
+            $transactions = $expenseModel->getExpenseTransactions();
             $response = [
                 'success' => true,
                 'data' => $transactions
