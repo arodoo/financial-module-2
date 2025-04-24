@@ -1,0 +1,42 @@
+# Configuration files with sensitive information
+Configurations_bdd.php
+Configurations.php
+Configurations_modules.php
+config/config.php
+config/database.php
+execute.php
+Configurations_stripe_keys.php
+# User uploaded content
+images/membres/
+panel/Profil/uploads/
+panel/Mes-photos/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.cache
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment files
+.env
+.env.local
+.env.dev
+.env.prod
+
+# Dependencies if you use Composer
+/vendor/
+
+# Session files
+/sessions/
+
+# MangoPay API credentials
+*mangopay*config.php
+
+# Development/production specific files
+debug_config.php

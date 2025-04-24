@@ -216,7 +216,7 @@ include('function/INCLUDE-FUNCTION-HAUT-CMS-CODI-ONE.php');
 										$fromRedirect = isset($_GET['from_redirect']) && $_GET['from_redirect'] == '1';
 
 										if (!empty($user) && !$fromRedirect) {
-											echo '<script>window.location.href = "/Planificator/dashboard";;</script>';
+											echo '<script>window.location.href = "/Tableau-de-Bord";;</script>';
 											// Use JavaScript redirect instead of PHP header to avoid buffering issues
 										} else if ($fromRedirect) {
 											echo '<div class="alert alert-warning">';

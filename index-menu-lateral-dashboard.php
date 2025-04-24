@@ -8,21 +8,21 @@
 				</a>
 			</li>
 
+			<li><a class="ai-icon" href="/Paiements-Fixes" aria-expanded="false">
+					<i class="fas fa-credit-card"></i>
+					<span class="nav-text">Eléments Fixes </span>
+				</a>
+			</li>
+
 			<li><a class="ai-icon" href="/Revenus-Depenses" aria-expanded="false">
 					<i class="fas fa-chart-pie"></i>
-					<span class="nav-text">Revenus & Dépenses</span>
+					<span class="nav-text">Eléments Ponctuels</span>
 				</a>
 			</li>
 
 			<li><a class="ai-icon" href="/Gestion-Actifs" aria-expanded="false">
 					<i class="fas fa-building"></i>
 					<span class="nav-text">Gestion des actifs</span>
-				</a>
-			</li>
-
-			<li><a class="ai-icon" href="/Paiements-Fixes" aria-expanded="false">
-					<i class="fas fa-credit-card"></i>
-					<span class="nav-text">Paiements fixes</span>
 				</a>
 			</li>
 
